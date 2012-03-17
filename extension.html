@@ -1,0 +1,66 @@
+<html>
+<head>
+    <script type="text/javascript" src="zepto.min.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    $(function() {
+        // Get user's selection
+        chrome.tabs.getSelected(null, function(tab) {
+            if (tab.url.indexOf('chrome://') == 0) {
+                // Not tab content
+                $('h1').show();
+            } else {
+                // Show extension
+                $('#iframe').show();
+                chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
+                    selected_note = response.note;
+                });
+            }
+        });
+    });
+    </script>
+    <script type="text/javascript" src="kippt_iframe.js" charset="utf-8"></script>
+    <style>
+        html, body {
+            width: 400px;
+            height: 240px;
+            margin: 0px;
+
+            background: #FFF;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+            -webkit-user-select: none;
+        }
+
+        h1 {
+            display: none;
+            font-size: 24px;
+            color: #E0E0E0;
+            margin: 25% 0;
+            text-align: center;
+            font-family: helvetica;
+        }
+        
+        #iframe {
+            display: none;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            font-family: helvetica;
+        }
+        
+        #iframe h2 {
+            color: #E0E0E0;
+            font-size: 24px;
+            font-weight: 300;
+            margin-top: 95px;
+        }
+    </style>
+</head>
+<body>
+    <div id="iframe">
+        <h2>Loading...</h2>
+    </div>
+    <h1>Open a page to Kippt it</h1>
+</body>
+</html>

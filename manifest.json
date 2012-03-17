@@ -1,0 +1,30 @@
+{
+    "name": "Kippt",
+    "version": "1.0.5",
+
+    "description": "Kippt.com's Chrome extension",
+    "homepage_url": "https://kippt.com",
+    "icons": { 
+        "16": "img/icon16.png",
+        "48": "img/icon48.png",
+        "128": "img/icon128.png"
+    },
+    "permissions": [
+      "tabs"
+    ],
+    
+    "browser_action": {
+        "default_icon": "img/icon16.png",
+        "default_title": "Kippt it",
+        "popup": "extension.html"
+    },
+    "content_scripts": [{
+        "js": ["kippt_content.js"],
+        "matches": ["http://*/*", "https://*/*"]
+    },
+    {
+        "all_frames": true,
+        "js": ["kippt_iframe.js"],
+        "matches": ["https://kippt.com/extensions*"]
+    }]
+}
