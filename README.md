@@ -2,9 +2,10 @@
 
 This is Kippt.com's official Chrome add-on. It's licensed under MIT and we accept improvements in pull-requests.
 
-## Building extension
+## Installation
 
-To build the extension, add the files to .zip and thne change the extension of the file to .oex
+You can load the extension from Chrome's Extension tab using *Load unpacked extension...* option once you have enabled *Developer mode*. Alternative you can install the official build from [Chrome Web Store](https://chrome.google.com/webstore/detail/pjldngiecbcfldpghnimmdelafenmbni).
 
-NB. The extension will only play nice with pages that were loaded after the extension was activated.
-To be sure all works as it should, restart Opera after installing.
+## TODO
+
+* Add keyboard shortcut (e.g. cmd+shift+k)
