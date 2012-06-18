@@ -6,11 +6,11 @@
         // Get user's selection
         chrome.tabs.getSelected(null, function(tab) {
             if (tab.url.indexOf('chrome://') == 0) {
-                // Not tab content
-                $('h1').show();
+                // Not tab content - Open Kippt
+                chrome.tabs.update({url: 'http://0.0.0.0:8000'});
+                window.close();
             } else {
                 // Show extension
-                $('#iframe').show();
                 chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
                     selected_note = response.note;
                 });
@@ -31,18 +31,8 @@
             overflow: hidden;
             -webkit-user-select: none;
         }
-
-        h1 {
-            display: none;
-            font-size: 24px;
-            color: #E0E0E0;
-            margin: 25% 0;
-            text-align: center;
-            font-family: helvetica;
-        }
         
         #iframe {
-            display: none;
             width: 100%;
             height: 100%;
             text-align: center;
@@ -61,6 +51,5 @@
     <div id="iframe">
         <h2>Loading...</h2>
     </div>
-    <h1>Open a page to Kippt it</h1>
 </body>
 </html>
