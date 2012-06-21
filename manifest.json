@@ -10,9 +10,14 @@
         "128": "img/icon128.png"
     },
     "permissions": [
-      "tabs"
+      "tabs",
+      "https://kippt.com/"
     ],
     
+    "omnibox": { "keyword" : "k" },
+    "background": {
+        "scripts": ["zepto.min.js", "kippt_omnibox.js"]
+    },
     "browser_action": {
         "default_icon": "img/icon16.png",
         "default_title": "Kippt it",
