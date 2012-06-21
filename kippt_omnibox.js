@@ -1,6 +1,6 @@
 chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
     if (text.length > 0) {
-        var search = 'https://kippt.com/api/search/clips/?q=' + text;
+        var search = 'https://kippt.com/api/search/clips/?limit=10&q=' + text;
         $.getJSON(search, function(data){
             if (data.objects) {
                 var suggestions = [];
