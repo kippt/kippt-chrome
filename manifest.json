@@ -19,7 +19,7 @@
         "scripts": ["zepto.min.js", "kippt_omnibox.js"]
     },
     "browser_action": {
-        "default_icon": "img/icon16.png",
+        "default_icon": "img/icon_browser_action.png",
         "default_title": "Kippt it",
         "popup": "extension.html"
     },
