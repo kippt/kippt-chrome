@@ -21,6 +21,12 @@ chrome.omnibox.onInputChanged.addListener(function(text, suggest) {
 
 chrome.omnibox.onInputEntered.addListener(function(text) {
     chrome.tabs.getSelected(null, function(tab) {
-        chrome.tabs.update(tab.id, {url : text});
+        if ((text.indexOf('http://') == 0) || (text.indexOf('https://') == 0)) {
+            // Go to search result
+            chrome.tabs.update(tab.id, {url : text});
+        } else {
+            // Search Kippt
+            chrome.tabs.update(tab.id, {url : 'https://kippt.com/search?q='+text});
+        }
     });
 });
