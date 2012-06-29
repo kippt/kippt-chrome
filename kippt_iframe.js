@@ -1,7 +1,11 @@
 $(function() {
     chrome.tabs.getSelected(null, function(tab) {
         chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
-            selected_note = response.note;
+            if (response){
+                selected_note = response.note;
+            } else {
+                selected_note = '';
+            }
             
             // Kippt iframe
             chrome.tabs.getSelected(null, function(tab){

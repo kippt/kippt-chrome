@@ -12,7 +12,11 @@
             } else {
                 // Show extension
                 chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
-                    selected_note = response.note;
+                    if (response){
+                        selected_note = response.note;
+                    } else {
+                        selected_note = '';
+                    }
                 });
             }
         });
