@@ -1,7 +1,7 @@
 var clickHandler = function(e) {
     var url = e.pageUrl;
     var selection = '';
-    var data = '';
+    var data = JSON.stringify({url: url});
     
     // Selected text on current page (save page url)
     if (e.selectionText) {
@@ -26,7 +26,19 @@ var clickHandler = function(e) {
 };
 
 chrome.contextMenus.create({
-  "title": "Save to Kippt",
-    "contexts": ["selection", "link"],
+  "title": "Save link to Kippt",
+    "contexts": ["link"],
+    "onclick" : clickHandler
+});
+
+chrome.contextMenus.create({
+  "title": "Save selection to Kippt",
+    "contexts": ["selection"],
+    "onclick" : clickHandler
+});
+
+chrome.contextMenus.create({
+  "title": "Save page to Kippt",
+    "contexts": ["page"],
     "onclick" : clickHandler
 });
