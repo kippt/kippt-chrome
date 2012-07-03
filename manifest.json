@@ -1,6 +1,6 @@
 {
     "name": "Kippt",
-    "version": "1.0.10",
+    "version": "1.0.11",
 
     "description": "Kippt.com's Chrome extension",
     "homepage_url": "https://kippt.com",
@@ -20,8 +20,8 @@
         "scripts": ["zepto.min.js", "json2.js", "kippt_omnibox.js", "kippt_context_menu.js"]
     },
     "browser_action": {
-        "default_icon": "img/icon_browser_action.png",
-        "default_title": "Kippt it",
+        "default_icon": "img/icon19.png",
+        "default_title": "Kippt this page",
         "popup": "extension.html"
     },
     "content_scripts": [{
