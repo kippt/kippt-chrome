@@ -3,6 +3,7 @@ $(function () {
         since,
         notifications = {}, 
         firstRound = true,
+        unreadCount = 0,
         
         poll,
         updateBadge,
@@ -21,7 +22,7 @@ $(function () {
         $.ajax({
             type: 'GET',
             url: 'https://kippt.com/api/notifications/',
-            dataType: 'jsonp',
+            dataType: 'json',
             data: { 
                 since: since,
                 include_data: 'user,clip'
@@ -31,12 +32,6 @@ $(function () {
                 var newNotifications = {},
                     lastTimestamp,
                     timestamp;
-                
-                try {
-                    data = JSON.parse(data);
-                } catch (e) {
-                    return;
-                }
                 
                 if (!data) {
                     return;
@@ -66,6 +61,9 @@ $(function () {
                 // Update badge with unread count
                 if (data.meta && typeof data.meta.unread_count === 'number') {
                     updateBadge(data.meta.unread_count);
+                    unreadCount = data.meta.unread_count;
+                } else {
+                    unreadCount = 0;
                 }
                 
                 // Treat rest of the requests as new so all the notifications get shown
@@ -85,7 +83,7 @@ $(function () {
         if (count == '?') {
             chrome.browserAction.setBadgeText({text: '?'});
         } else if (count === 0) {
-            chrome.browserAction.setBadgeText({text: '0'});
+            chrome.browserAction.setBadgeText({text: ''});
         } else {
             chrome.browserAction.setBadgeText({text: count});
         }
@@ -101,7 +99,24 @@ $(function () {
         notification.onclick = function () {
             notification.cancel();
             chrome.tabs.update({url: 'https://kippt.com' + notificationData.item_url});
-            // TODO: mark notification as read
+            $.ajax({
+                type: 'POST',
+                url: 'https://kippt.com/api/notifications',
+                dataType: 'json',
+                data: {
+                    action: 'mark_seen',
+                    data: [notificationData.id]
+                },
+                success: function (data, status, xhr) {
+                    if (unreadCount > 0) {
+                        unreadCount -= 1;
+                    }
+                    updateBadge(unreadCount);
+                },
+                error: function (xhr, errorType, error) {
+                    
+                }
+            });
         };
         notification.ondisplay = function () {
             // Close popup after 10 seconds
