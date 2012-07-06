@@ -12,12 +12,13 @@
     "permissions": [
       "tabs",
       "contextMenus",
-      "https://kippt.com/"
+      "https://kippt.com/",
+			"notifications"
     ],
     
     "omnibox": { "keyword" : "k" },
     "background": {
-        "scripts": ["zepto.min.js", "json2.js", "kippt_omnibox.js", "kippt_context_menu.js"]
+        "scripts": ["zepto.min.js", "json2.js", "kippt_omnibox.js", "kippt_context_menu.js", "kippt_desktop_notifications.js"]
     },
     "browser_action": {
         "default_icon": "img/icon19.png",
