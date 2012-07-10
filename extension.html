@@ -7,7 +7,7 @@
         chrome.tabs.getSelected(null, function(tab) {
             if (tab.url.indexOf('chrome://') == 0) {
                 // Not tab content - Open Kippt
-                chrome.tabs.update({url: 'https://kippt.com'});
+                chrome.tabs.update({url: 'https://kippt.com/inbox/'});
                 window.close();
             } else {
                 // Show extension
