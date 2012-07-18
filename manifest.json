@@ -14,10 +14,11 @@
       "contextMenus",
       "https://kippt.com/"
     ],
+    "options_page": "options.html",
     
     "omnibox": { "keyword" : "k" },
     "background": {
-        "scripts": ["zepto.min.js", "json2.js", "kippt_omnibox.js", "kippt_context_menu.js"]
+        "scripts": ["zepto.min.js", "json2.js", "kippt_omnibox.js", "kippt_context_menu.js", "tabs.js"]
     },
     "browser_action": {
         "default_icon": "img/icon19.png",
