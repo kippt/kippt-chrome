@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Kippt Options</title>
+  <script type="text/javascript" src="zepto.min.js"></script>
+  <script type="text/javascript">
+    // Saves options to localStorage.
+    function save_options() {
+      var select = $("#color");
+      var color = $("#color").val();
+      localStorage["button_color"] = color;
+
+      switch (localStorage["button_color"]) {
+        case "grey":
+          chrome.browserAction.setIcon({
+            path: "img/icon19_grey.png"
+          });
+          break;
+        default:
+          chrome.browserAction.setIcon({
+            path: "img/icon19.png"
+          });
+          break;
+      }
+
+      // Update status to let user know options were saved.
+      $("#status").text("Saved!");
+      setTimeout(function() {
+        $("#status").text();
+      }, 1500);
+    }
+
+    // Restores select box state to saved value from localStorage.
+    function restore_options() {
+      var color = localStorage["button_color"];
+      if (!color) {
+        return;
+      }
+      $("#color").find("option").each(function (index, option) {
+        if ($(option).val() == color) {
+          option.selected = "true";
+        }
+      });
+    }
+
+    $(function() {
+      restore_options();
+      $("button").click(save_options);
+    });
+  </script>
+</head>
+<body>
+<label>Button color:
+  <select id="color">
+   <option value="red">Red (default)</option>
+   <option value="grey">Grey</option>
+  </select>
+</label>
+<br>
+<button>Save</button>
+<p id="status"></p>
+</body>
+</html>
