@@ -179,6 +179,14 @@
                     Socket.postTask(data);
                     window.close();
                 });
+                
+                // Cache notes
+                $('#id_title').on('keyup change cut paste', function(e){
+                    localStorage.setItem('cache-title', $('#id_title').val())
+                });
+                $('#id_notes').on('keyup change cut paste', function(e){
+                    localStorage.setItem('cache-notes', $('#id_notes').val())
+                });
             }
         });
     });

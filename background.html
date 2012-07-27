@@ -27,6 +27,10 @@
                 dataType: 'json',
                 data: JSON.stringify(msg)
             });
+            request.done(function(){
+                localStorage.removeItem('cache-title');
+                localStorage.removeItem('cache-notes');
+            });
             request.fail(function(jqXHR, textStatus){
                 alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
             });

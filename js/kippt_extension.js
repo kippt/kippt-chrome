@@ -20,6 +20,12 @@ $(function() {
                 $('#id_notes').val(selected_note.trim());
 
                 $('textarea').focus();
+                
+                // Get from cache
+                if (localStorage.getItem('cache-title'))
+                    $('#id_title').val( localStorage.getItem('cache-title') );
+                if (localStorage.getItem('cache-notes'))
+                    $('#id_notes').val( localStorage.getItem('cache-notes') );
             });
         });
     });
