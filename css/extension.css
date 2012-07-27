@@ -1,0 +1,300 @@
+html, body {
+    min-width: 420px;
+    min-height: 240px;
+    margin: 0px;
+
+    background: #FFF;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+    -webkit-user-select: none;
+}
+
+body {
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing:antialiased;
+}
+
+#kippt-frame {
+}
+
+.home, .profile, .logo, #kippt-actions .toggle {
+    background-image:url(/img/extension-sprite.png);
+    background-repeat:no-repeat;
+}
+
+#kippt-header, #kippt-actions {
+    background:url(/img/extension-header-bg.png) repeat-x #f6f6f6;
+}
+
+#kippt-header {
+    height:36px;
+    border-bottom:1px solid #ccc;
+    box-shadow:0 0px 1px #eee;
+}
+
+.home, .profile, .logo {
+    float:right;
+    height:20px;
+    width:20px;
+    padding:8px 10px;
+    background-position: 15px 12px;
+    border-left:1px solid #ccc;
+    opacity:0.5;
+}
+
+.logo {
+    float:left;
+    background-position: -53px 9px;
+    padding: 8px 0;
+    width: 60px;
+    opacity: 1;
+    border: 0;
+    outline:0;
+}
+
+.existing {
+    position: absolute;
+    left: 68px;
+    
+    float: left;
+    margin: 11px 0 0 3px;
+}
+
+.existing .loading {
+    margin-top: 7px;
+}
+
+.existing a {
+    display: none;
+    font-size: 13px;
+    text-decoration: none;
+    color: #DD390D;
+}
+
+.profile {
+    background-position:14px -19px;
+}
+
+.home:hover, .profile:hover {
+    opacity:0.8;
+}
+
+input[type=text], textarea {
+    width:100%;
+    border:0;
+    padding:8px 12px;
+    border-bottom:1px solid #ddd;
+    resize:none;
+    font-size:12px;
+    color:#333;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+input[type=text] {
+    font-weight:bold;
+    border-bottom:1px dotted #ddd;
+}
+
+textarea {
+    height:74px;
+}
+
+input:focus, textarea:focus {
+    outline:0;
+}
+
+input[type=checkbox] {
+    padding: 0;
+    margin: 0;
+    vertical-align: middle;
+    margin-left: 4px;
+}
+
+#kippt-list {
+    padding:10px 10px;
+    height:25px;
+}
+
+#kippt-list input {
+    margin:0 4px 0 0;
+}
+
+#kippt-list select {
+    width:397px;
+}
+
+#kippt-list #id_new_list {
+    display: none;
+}
+
+.kippt-later {
+    padding: 4px;
+    font-size: 11px;
+    float: right;
+    color: #333;
+    text-decoration: none;
+    border-radius:3px;
+    height:12px;
+    vertical-align:middle;
+}
+
+
+#kippt-actions {
+    border-top:1px solid #ccc;
+    padding:10px;
+    height:30px;
+}
+
+#kippt-actions > div {
+    padding:2px;
+    width:43px;
+    height:24px;
+    display:inline-block;
+    line-height:20px;
+    border-radius:2px;
+    margin-top:3px;
+    position:relative;
+}
+
+#kippt-actions .toggle {
+    display:inline-block;
+    width:20px;
+    height:20px;
+    text-align:center;
+    margin-left:1px;
+    margin-top: 1px;
+    border-radius:2px;
+    line-height:18px;
+    vertical-align:middle;
+}
+
+/*#kippt-actions .toggle:hover {
+    background-color:#bbb;
+}*/
+
+#kippt-actions .twitter .toggle {
+    background-image:url(http://twitter.com/favicon.ico);
+}
+
+#kippt-actions .facebook .toggle {
+    background-image:url(http://facebook.com/favicon.ico);
+}
+
+#kippt-actions .buffer .toggle {
+    background-image:url(http://bufferapp.com/favicon.ico);
+}
+
+#kippt-actions .tumblr .toggle {
+    background-image:url(http://tumblr.com/favicon.ico);
+}
+
+#kippt-actions .instapaper .toggle {
+    background-image:url(http://instapaper.com/favicon.ico);
+}
+
+#kippt-actions .readability .toggle {
+    background-image:url(http://readability.com/favicon.ico);
+}
+
+#kippt-actions .pocket .toggle {
+    background-image:url(http://getpocket.com/favicon.ico);
+}
+
+#kippt-actions .buffer, #kippt-actions .tumblr, #kippt-actions .instapaper, #kippt-actions .readability, #kippt-actions .pocket {
+    display: none;
+}
+
+#kippt-actions .connect a {
+    display:block;
+    width:45px;
+    height:45px;
+    position:absolute;
+    top:0;
+    right:0;
+}
+
+#submit_clip, a.button {
+    float: right;
+    margin: 0 2px 0 0;
+    min-width: 73px;
+    background-color: #EFEFEF;
+    background-image: -moz-linear-gradient(white, #EFEFEF);
+    background-image: -o-linear-gradient(white, #EFEFEF);
+    background-image: -ms-linear-gradient(white, #EFEFEF);
+    background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, white), color-stop(1, #EFEFEF));
+    background-image: -webkit-linear-gradient(white, #EFEFEF);
+    box-shadow: 0 1px 1px #EEE;
+    
+    font-weight: bold;
+    border: 1px solid #CCC;
+    border-top: 1px solid #DDD;
+    color: #333;
+    text-shadow: 0 1px 0px white;
+    border-bottom: 1px solid #AAA;
+    padding: 0.5em 0.8em;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -ms-border-radius: 3px;
+    -o-border-radius: 3px;
+    border-radius: 3px;
+    
+    -webkit-transition: 0.15s border-color linear;
+    -moz-transition: 0.15s border-color linear;
+    white-space: nowrap;
+    vertical-align: middle;
+    
+    font-size: 13px;
+    line-height: 18px;
+}
+
+#submit_clip:hover, a.button:hover {
+    background-position: 0 0;
+    border-color: #BBB;
+    -webkit-transition: 0.15s border-color linear;
+    -moz-transition: 0.15s border-color linear;
+    
+    background-position: 0 0px;
+    border: 1px solid #999;
+    -moz-box-shadow: 0 0 3px #ccc;
+    -ms-box-shadow: 0 0 3px #ccc;
+    -o-box-shadow: 0 0 3px #ccc;
+    -webkit-box-shadow: 0 0 3px #CCC;
+    box-shadow: 0 0 3px #CCC;
+}
+
+#submit_clip:focus, a.button:focus {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+#submit_clip:active, a.button:active {
+    background-image: none;
+      -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+      -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+      background-color: #e6e6e6;
+      background-color: #d9d9d9 \9;
+      outline: 0;
+}
+
+#logged-out {
+    display: none;
+    
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    
+    padding: 50px 30px;
+    background: #fff;
+}
+
+#logged-out .background {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
