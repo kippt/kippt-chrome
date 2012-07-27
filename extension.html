@@ -50,7 +50,7 @@
 
                 // Get user data
                 var userResponse = $.ajax({
-                    url: 'http://0.0.0.0:8000/api/account/?include_data=services',
+                    url: 'https://kippt.com/api/account/?include_data=services',
                     type: "GET",
                     dataType: 'json'
                 });
@@ -164,8 +164,8 @@
                     data['share'] = services;
                     
                     // Save to Kippt in background
-                    //Socket.postTask(data);
-                    //window.close();
+                    Socket.postTask(data);
+                    window.close();
                 });
             }
         });
