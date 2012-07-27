@@ -6,58 +6,65 @@
   <script type="text/javascript">
     // Saves options to localStorage.
     function save_options() {
-      var select = $("#color");
-      var color = $("#color").val();
-      localStorage["button_color"] = color;
+        var select = $("#button-color");
+        var color = $("#button-color input[name=button_color]:checked").val();
+        localStorage["button_color"] = color;
+        
+        switch (localStorage["button_color"]) {
+            case "grey":
+                chrome.browserAction.setIcon({
+                    path: "img/icon19_grey.png"
+                });
+                break;
+            case "light":
+                chrome.browserAction.setIcon({
+                    path: "img/icon19_light.png"
+                });
+                break;
+            default:
+                chrome.browserAction.setIcon({
+                    path: "img/icon19.png"
+                });
+                break;
+        }
 
-      switch (localStorage["button_color"]) {
-        case "grey":
-          chrome.browserAction.setIcon({
-            path: "img/icon19_grey.png"
-          });
-          break;
-        default:
-          chrome.browserAction.setIcon({
-            path: "img/icon19.png"
-          });
-          break;
-      }
-
-      // Update status to let user know options were saved.
-      $("#status").text("Saved!");
-      setTimeout(function() {
-        $("#status").text();
-      }, 1500);
+        // Update status to let user know options were saved.
+        $("#status").text("Saved!");
+        setTimeout(function() {
+            $("#status").text();
+        }, 1500);
     }
 
     // Restores select box state to saved value from localStorage.
     function restore_options() {
-      var color = localStorage["button_color"];
-      if (!color) {
-        return;
-      }
-      $("#color").find("option").each(function (index, option) {
-        if ($(option).val() == color) {
-          option.selected = "true";
+        var color = localStorage["button_color"];
+        if (color === undefined) {
+            $("#button-color input[name=button_color]").first().attr('checked', 'checked')
         }
-      });
+        $("#button-color input[name=button_color]").each(function (index, option) {
+            if ($(option).val() == color) {
+                option.checked = "true";
+            }
+        });
     }
 
     $(function() {
-      restore_options();
-      $("button").click(save_options);
+        restore_options();
+        $("button").click(save_options);
     });
   </script>
 </head>
 <body>
     <div class="button-color">
-        <label>Button color:
-            <select id="color">
-                <option value="red">Red (default)</option>
-                <option value="grey">Grey</option>
+        <label>Extension button theme:
+            <ul id="button-color">
+                <li><input type="radio" name="button_color" value="red" id="id_button_original"> <label for="id_button_original"><img src="img/icon19.png" />Original</label></li>
+                <li><input type="radio" name="button_color" value="grey" id="id_button_grey"> <label for="id_button_grey"><img src="img/icon19_grey.png" />Greyscale</label></li>
+                <li><input type="radio" name="button_color" value="light" id="id_button_light"> <label for="id_button_light"><img src="img/icon19_light.png" />Light</label></li>
             </select>
        </label>
     </div>
+    <!--
     <div class="services">
         <h2>Services</h2>
         <ul>
@@ -71,6 +78,7 @@
             
         </ul>
     </div>
+    -->
 <br>
 <button>Save</button>
 <p id="status"></p>

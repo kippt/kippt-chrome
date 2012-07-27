@@ -61,7 +61,10 @@
                         $('#kippt-actions .' + serviceName).click(function(e) {
                             window.open('https://kippt.com/accounts/settings/connections/')
                         });
+
                     };
+                    
+                    var showShare = function(serviceName) { $('#kippt-actions .'+serviceName).css('display', 'inline-block'); };
                     
                     if (services.twitter === false)
                         linkShare('twitter');
@@ -69,12 +72,20 @@
                         linkShare('facebook');
                     if (services.tumblr === false)
                         linkShare('tumblr');
+                    else
+                        showShare('tumblr');
                     if (services.instapaper === false)
                         linkShare('instapaper');
+                    else
+                        showShare('instapaper');
                     if (services.readability === false)
                         linkShare('readability');
+                    else
+                        showShare('readability');
                     if (services.pocket === false)
                         linkShare('pocket');
+                    else
+                        showShare('pocket');
                 });
                 userResponse.fail(function(jqXHR, textStatus){
                     $('.existing .loading').hide();
@@ -350,30 +361,35 @@
         }*/
 
         #kippt-actions .twitter .toggle {
-            /*background-position:-27px -28px;
-            background-color:#00A7D8;*/
             background-image:url(http://twitter.com/favicon.ico);
         }
         
         #kippt-actions .facebook .toggle {
-            /*background-color:#405C9E;
-            background-position:-26px 3px;*/
             background-image:url(http://facebook.com/favicon.ico);
         }
         
         #kippt-actions .buffer .toggle {
-            /*background-position:-27px -79px;
-            background-color:#222;*/
             background-image:url(http://bufferapp.com/favicon.ico);
         }
         
         #kippt-actions .tumblr .toggle {
-            background-position:-27px -58px;
-            background-color:#2B4660;
+            background-image:url(http://tumblr.com/favicon.ico);
         }
         
-        #kippt-actions .connect .toggle {
-            background-color:#bbb;
+        #kippt-actions .instapaper .toggle {
+            background-image:url(http://instapaper.com/favicon.ico);
+        }
+        
+        #kippt-actions .readability .toggle {
+            background-image:url(http://readability.com/favicon.ico);
+        }
+        
+        #kippt-actions .pocket .toggle {
+            background-image:url(http://getpocket.com/favicon.ico);
+        }
+        
+        #kippt-actions .buffer, #kippt-actions .tumblr, #kippt-actions .instapaper, #kippt-actions .readability, #kippt-actions .pocket {
+            display: none;
         }
         
         #kippt-actions .connect a {
@@ -511,7 +527,25 @@
                 <label for="share-facebook" class="toggle"></label>
             </div>
             
-            <!-- Other services: tumblr, instapaper, readability, pocket -->
+            <div class="tumblr" data-connect-title="Click to connect with Tumblr">
+                <input type="checkbox" class="share" id="share-tumblr" data-service="tumblr" />
+                <label for="share-tumblr" class="toggle"></label>
+            </div>
+            
+            <div class="instapaper" data-connect-title="Click to connect with Instapaper">
+                <input type="checkbox" class="share" id="share-instapaper" data-service="instapaper" />
+                <label for="share-instapaper" class="toggle"></label>
+            </div>
+            
+            <div class="readability" data-connect-title="Click to connect with Readability">
+                <input type="checkbox" class="share" id="share-readability" data-service="readability" />
+                <label for="share-readability" class="toggle"></label>
+            </div>
+            
+            <div class="pocket" data-connect-title="Click to connect with Pocket">
+                <input type="checkbox" class="share" id="share-pocket" data-service="pocket" />
+                <label for="share-pocket" class="toggle"></label>
+            </div>
             
             <input type="submit" value="Save" id="submit_clip">
         </div>

@@ -1,16 +1,21 @@
 function setIconColor() {
-  switch (localStorage["button_color"]) {
-    case "grey":
-      chrome.browserAction.setIcon({
-        path: "img/icon19_grey.png"
-      });
-      break;
-    default:
-      chrome.browserAction.setIcon({
-        path: "img/icon19.png"
-      });
-      break;
-  }
+    switch (localStorage["button_color"]) {
+        case "grey":
+            chrome.browserAction.setIcon({
+                path: "img/icon19_grey.png"
+            });
+            break;
+        case "light":
+            chrome.browserAction.setIcon({
+                path: "img/icon19_light.png"
+            });
+            break;
+        default:
+            chrome.browserAction.setIcon({
+                path: "img/icon19.png"
+            });
+            break;
+    }
 }
 
 chrome.tabs.onCreated.addListener(setIconColor);
