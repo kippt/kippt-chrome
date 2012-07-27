@@ -33,16 +33,6 @@ $(function() {
                 chrome.tabs.update({url: 'https://kippt.com/inbox/'});
                 window.close();
             } else {
-                /*
-                TODO:
-
-                - Cache results for current url
-                - New list creation
-                - Read later
-                - Search for clips
-
-                */
-                
                 // General variables
                 var url = tab.url,
                     existingClipId = false;

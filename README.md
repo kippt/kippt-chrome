@@ -8,4 +8,7 @@ You can load the extension from Chrome's Extension tab using *Load unpacked exte
 
 ## TODO
 
+* New list creation
+* Read later
+* Search for clips
 * Add keyboard shortcut (e.g. cmd+shift+k)
