@@ -1,37 +1,177 @@
 <html>
 <head>
-    <script type="text/javascript" src="zepto.min.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/vendor/jquery.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/vendor/socket.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/vendor/spin.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/vendor/tipsy.js" charset="utf-8"></script>
+    <script type="text/javascript" src="js/kippt_extension.js" charset="utf-8"></script>
     <script type="text/javascript">
     $(function() {
-        // Get user's selection
         chrome.tabs.getSelected(null, function(tab) {
             if (tab.url.indexOf('chrome://') == 0) {
                 // Not tab content - Open Kippt
                 chrome.tabs.update({url: 'https://kippt.com/inbox/'});
                 window.close();
             } else {
-                // Show extension
-                chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
-                    if (response){
-                        selected_note = response.note;
-                    } else {
-                        selected_note = '';
+                /*
+                TODO:
+
+                - Cache results for current url
+
+                */
+                
+                // General variables
+                var url = tab.url,
+                    existingClipId = false;
+                
+                // Init spinner
+                var opts = {
+                  lines: 9, // The number of lines to draw
+                  length: 2, // The length of each line
+                  width: 2, // The line thickness
+                  radius: 3, // The radius of the inner circle
+                  rotate: 0, // The rotation offset
+                  color: '#111', // #rgb or #rrggbb
+                  speed: 1, // Rounds per second
+                  trail: 27, // Afterglow percentage
+                  shadow: false, // Whether to render a shadow
+                  hwaccel: false, // Whether to use hardware acceleration
+                  className: 'spinner', // The CSS class to assign to the spinner
+                  zIndex: 2e9, // The z-index (defaults to 2000000000)
+                  top: 'auto', // Top position relative to parent in px
+                  left: 'auto' // Left position relative to parent in px
+                };
+                var spinner = new Spinner(opts).spin();
+
+                // Get user data
+                var userResponse = $.ajax({
+                    url: 'http://0.0.0.0:8000/api/account/?include_data=services',
+                    type: "GET",
+                    dataType: 'json'
+                });
+                userResponse.done(function(data){
+                    var services = data.services;
+                    var linkShare = function(serviceName) {
+                        $('#kippt-actions .' + serviceName).tipsy({title: 'data-connect-title', gravity: 'sw'});
+                        $('#kippt-actions .' + serviceName).click(function(e) {
+                            window.open('https://kippt.com/accounts/settings/connections/')
+                        });
+                    };
+                    
+                    if (services.twitter === false)
+                        linkShare('twitter');
+                    if (services.facebook === false)
+                        linkShare('facebook');
+                    if (services.tumblr === false)
+                        linkShare('tumblr');
+                    if (services.instapaper === false)
+                        linkShare('instapaper');
+                    if (services.readability === false)
+                        linkShare('readability');
+                    if (services.pocket === false)
+                        linkShare('pocket');
+                });
+                userResponse.fail(function(jqXHR, textStatus){
+                    $('.existing .loading').hide();
+                    $('#logged-out').show();
+                });
+                
+                // Check for dublicates
+                $('.existing .loading').append(spinner.el);
+                var dublicateRequest = $.ajax({
+                    url: 'https://kippt.com/api/clips/?include_data=list&url='+escape(url),
+                    type: "GET",
+                    dataType: 'json'
+                });
+                dublicateRequest.done(function(response){
+                    $('.existing .loading').hide();
+                    if (response.meta.total_count) {
+                        var duplicate = response.objects[0];
+                        existingClipId = duplicate.id;
+                        $('.existing a').show();
+                        $('.existing a').click(function(e){
+                            $('#id_title').val(duplicate.title);
+                            $('#id_notes').val(duplicate.notes);
+                            $('#id_list option[value='+duplicate.list.id+']').attr('selected', 'selected');
+                            $('.existing').hide();
+                        });
                     }
+                });
+
+                // Lists
+                var updateLists = function(data) {
+                    // Clear loading
+                    $('#id_list').html('');
+                    for (var i in data) {
+                        var list = data[i];
+                        $('#id_list').append(new Option(list['title'], list['id'], true, true));
+                    }
+                    $('#id_list option').first().attr('selected', 'selected');
+                };
+
+                // Fill lists from cache
+                var listCache = localStorage.getItem('kipptListCache');
+                if (listCache) {
+                    updateLists(JSON.parse(listCache));
+                }
+
+                // Update lists from remote
+                $.getJSON(
+                    'https://kippt.com/api/lists/?limit=0',
+                    function(response) {
+                        var responseJSON = JSON.stringify(response.objects);
+                        // Update only if lists have changed
+                        if (responseJSON !== listCache) {
+                            // Update UI
+                            updateLists(response.objects);
+                            // Save to cache
+                            localStorage.setItem('kipptListCache', responseJSON);
+                        }
+                    }
+                )
+
+                // Shares
+                $('.share').click(function(e){
+                    if ($('.share:checked').length) {
+                        $('#submit_clip').val('Save & share');
+                    } else {
+                        $('#submit_clip').val('Save')
+                    }
+                });
+
+                // Handle save
+                $('#submit_clip').click(function(e){
+                    // Data
+                    var data = {
+                        id: existingClipId,
+                        url: url,
+                        title: $('#id_title').val(),
+                        notes: $('#id_notes').val(),
+                        list: $('#id_list option:selected').val(),
+                        source: 'chrome_v1.1'
+                    }
+                    
+                    // Shares
+                    var services = [];
+                    $('.share:checked').each(function(i, elem){
+                        services.push($(elem).data('service'));
+                    });
+                    data['share'] = services;
+                    
+                    // Save to Kippt in background
+                    //Socket.postTask(data);
+                    //window.close();
                 });
             }
         });
-        
-        // Notify user to open a new window
-        setTimeout(function() {
-            $('h2').html('Open a new window in<br/>Chrome to start clipping.');
-        }, 1500);
     });
     </script>
-    <script type="text/javascript" src="kippt_iframe.js" charset="utf-8"></script>
+    
+    <link rel="stylesheet" type="text/css" href="css/tipsy.css"> 
     <style>
         html, body {
-            width: 400px;
-            height: 240px;
+            min-width: 420px;
+            min-height: 240px;
             margin: 0px;
 
             background: #FFF;
@@ -41,24 +181,341 @@
             -webkit-user-select: none;
         }
         
-        #iframe {
-            width: 100%;
-            height: 100%;
-            text-align: center;
-            font-family: helvetica;
+        body {
+            font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+            -webkit-font-smoothing:antialiased;
         }
         
-        #iframe h2 {
-            color: #E0E0E0;
-            font-size: 24px;
-            font-weight: 300;
-            margin-top: 95px;
+        #kippt-frame {
+        }
+        
+        .home, .profile, .logo, #kippt-actions .toggle {
+            background-image:url(img/extension-sprite.png);
+            background-repeat:no-repeat;
+        }
+        
+        #kippt-header, #kippt-actions {
+            background:url(img/extension-header-bg.png) repeat-x #f6f6f6;
+        }
+        
+        #kippt-header {
+            height:36px;
+            border-bottom:1px solid #ccc;
+            box-shadow:0 0px 1px #eee;
+        }
+        
+        .home, .profile, .logo {
+            float:right;
+            height:20px;
+            width:20px;
+            padding:8px 10px;
+            background-position: 15px 12px;
+            border-left:1px solid #ccc;
+            opacity:0.5;
+        }
+        
+        .logo {
+            float:left;
+            background-position: -53px 9px;
+            padding: 8px 0;
+            width: 60px;
+            opacity: 1;
+            border: 0;
+            outline:0;
+        }
+        
+        .existing {
+            position: absolute;
+            left: 68px;
+            
+            float: left;
+            margin: 11px 0 0 3px;
+        }
+        
+        .existing .loading {
+            margin-top: 7px;
+        }
+        
+        .existing a {
+            display: none;
+            font-size: 13px;
+            text-decoration: none;
+            color: #DD390D;
+        }
+        
+        .profile {
+            background-position:14px -19px;
+        }
+        
+        .home:hover, .profile:hover {
+            opacity:0.8;
+        }
+
+        input[type=text], textarea {
+            width:100%;
+            border:0;
+            padding:8px 12px;
+            border-bottom:1px solid #ddd;
+            resize:none;
+            font-size:12px;
+            color:#333;
+            font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+        }
+        
+        input[type=text] {
+            font-weight:bold;
+            border-bottom:1px dotted #ddd;
+        }
+        
+        textarea {
+            height:74px;
+        }
+        
+        input:focus, textarea:focus {
+            outline:0;
+        }
+        
+        input[type=checkbox] {
+            padding: 0;
+            margin: 0;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+        
+        #kippt-list {
+            padding:10px 10px;
+            height:25px;
+        }
+
+        #kippt-list input {
+            margin:0 4px 0 0;
+        }
+
+        #kippt-list select {
+            width:397px;
+        }
+        
+        #kippt-list #id_new_list {
+            display: none;
+        }
+
+        .kippt-later {
+            padding: 4px;
+            font-size: 11px;
+            float: right;
+            color: #333;
+            text-decoration: none;
+            border-radius:3px;
+            height:12px;
+            vertical-align:middle;
+        }
+
+        
+        #kippt-actions {
+            border-top:1px solid #ccc;
+            padding:10px;
+            height:30px;
+        }
+        
+        #kippt-actions > div {
+            padding:2px;
+            width:43px;
+            height:24px;
+            display:inline-block;
+            line-height:20px;
+            border-radius:2px;
+            margin-top:3px;
+            position:relative;
+        }
+        
+        #kippt-actions .toggle {
+            display:inline-block;
+            width:20px;
+            height:20px;
+            text-align:center;
+            margin-left:1px;
+            margin-top: 1px;
+            border-radius:2px;
+            line-height:18px;
+            vertical-align:middle;
+        }
+
+        /*#kippt-actions .toggle:hover {
+            background-color:#bbb;
+        }*/
+
+        #kippt-actions .twitter .toggle {
+            /*background-position:-27px -28px;
+            background-color:#00A7D8;*/
+            background-image:url(http://twitter.com/favicon.ico);
+        }
+        
+        #kippt-actions .facebook .toggle {
+            /*background-color:#405C9E;
+            background-position:-26px 3px;*/
+            background-image:url(http://facebook.com/favicon.ico);
+        }
+        
+        #kippt-actions .buffer .toggle {
+            /*background-position:-27px -79px;
+            background-color:#222;*/
+            background-image:url(http://bufferapp.com/favicon.ico);
+        }
+        
+        #kippt-actions .tumblr .toggle {
+            background-position:-27px -58px;
+            background-color:#2B4660;
+        }
+        
+        #kippt-actions .connect .toggle {
+            background-color:#bbb;
+        }
+        
+        #kippt-actions .connect a {
+            display:block;
+            width:45px;
+            height:45px;
+            position:absolute;
+            top:0;
+            right:0;
+        }
+        
+        #submit_clip, a.button {
+            float: right;
+            margin: 0 2px 0 0;
+            min-width: 73px;
+            background-color: #EFEFEF;
+            background-image: -moz-linear-gradient(white, #EFEFEF);
+            background-image: -o-linear-gradient(white, #EFEFEF);
+            background-image: -ms-linear-gradient(white, #EFEFEF);
+            background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, white), color-stop(1, #EFEFEF));
+            background-image: -webkit-linear-gradient(white, #EFEFEF);
+            box-shadow: 0 1px 1px #EEE;
+            
+            font-weight: bold;
+            border: 1px solid #CCC;
+            border-top: 1px solid #DDD;
+            color: #333;
+            text-shadow: 0 1px 0px white;
+            border-bottom: 1px solid #AAA;
+            padding: 0.5em 0.8em;
+            -webkit-border-radius: 3px;
+            -moz-border-radius: 3px;
+            -ms-border-radius: 3px;
+            -o-border-radius: 3px;
+            border-radius: 3px;
+            
+            -webkit-transition: 0.15s border-color linear;
+            -moz-transition: 0.15s border-color linear;
+            white-space: nowrap;
+            vertical-align: middle;
+            
+            font-size: 13px;
+            line-height: 18px;
+        }
+        
+        #submit_clip:hover, a.button:hover {
+            background-position: 0 0;
+            border-color: #BBB;
+            -webkit-transition: 0.15s border-color linear;
+            -moz-transition: 0.15s border-color linear;
+            
+            background-position: 0 0px;
+            border: 1px solid #999;
+            -moz-box-shadow: 0 0 3px #ccc;
+            -ms-box-shadow: 0 0 3px #ccc;
+            -o-box-shadow: 0 0 3px #ccc;
+            -webkit-box-shadow: 0 0 3px #CCC;
+            box-shadow: 0 0 3px #CCC;
+        }
+        
+        #submit_clip:focus, a.button:focus {
+            outline: 5px auto -webkit-focus-ring-color;
+            outline-offset: -2px;
+        }
+        
+        #submit_clip:active, a.button:active {
+            background-image: none;
+              -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+              -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+              box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+              background-color: #e6e6e6;
+              background-color: #d9d9d9 \9;
+              outline: 0;
+        }
+        
+        #logged-out {
+            display: none;
+            
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            
+            padding: 50px 30px;
+            background: #fff;
+        }
+        
+        #logged-out .background {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
         }
     </style>
 </head>
 <body>
-    <div id="iframe">
-        <h2>Loading...</h2>
+    <div id="kippt-frame">
+        <div id="kippt-header">
+            <a href="https://kippt.com" title="Open Kippt" target="_blank" class="logo"></a>
+            <div class="existing">
+                <div class="loading"></div>
+                <a href="#">Modify existing clip</a>
+            </div>
+            <a href="https://kippt.com/inbox/" title="Open Inbox" target="_blank" class="home"></a>
+            <a href="#" class="profile"></a>
+        </div>
+
+        <div>
+            <input id="id_title" type="text" name="title" maxlength="512" placeholder="Title" value="" />
+        </div>
+        <div>
+            <textarea id="id_notes" rows="10" cols="40" name="notes" placeholder="Enter notes and #tags here..."></textarea>
+        </div>
+
+        <div id="kippt-list">
+            <select class="lists" id="id_list">
+                <option value="inbox">Inbox</option>
+            </select>
+            <input type="text" placeholder="New list" id="id_new_list" name="new_list" />
+            <!--<div class="kippt-later">
+                <input type="checkbox" id="read-later"><label for="read-later">Read Later</label>
+            </div>-->
+        </div>
+
+        <div id="kippt-actions">
+            <div class="twitter" data-connect-title="Click to connect with Twitter">
+                <input type="checkbox" class="share" id="share-twitter" data-service="twitter" />
+                <label for="share-twitter" class="toggle"></label>
+            </div>
+        
+            <div class="facebook" data-connect-title="Click to connect with Facebook">
+                <input type="checkbox" class="share" id="share-facebook" data-service="facebook" />
+                <label for="share-facebook" class="toggle"></label>
+            </div>
+            
+            <!-- Other services: tumblr, instapaper, readability, pocket -->
+            
+            <input type="submit" value="Save" id="submit_clip">
+        </div>
+    </div>
+    <div id="logged-out">
+        <div class="background"></div>
+        <h1>Welcome to Kippt</h1>
+        <p>Kippt makes it easy to save and share interesting things you find on the web.</p>
+        <div><a href="https://kippt.com/signup/" class="button" target="_blank">Sign Up</a> or <a href="https://kippt.com/login/" target="_blank">log in</a></div>
     </div>
 </body>
 </html>

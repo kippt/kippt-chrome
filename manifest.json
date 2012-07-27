@@ -1,6 +1,6 @@
 {
     "name": "Kippt",
-    "version": "1.0.12",
+    "version": "1.1",
 
     "description": "Kippt.com's Chrome extension",
     "homepage_url": "https://kippt.com",
@@ -12,12 +12,13 @@
     "permissions": [
       "tabs",
       "contextMenus",
-      "https://kippt.com/"
+      "https://kippt.com/",
+      "http://0.0.0.0:8000/"
     ],
     
     "omnibox": { "keyword" : "k" },
     "background": {
-        "scripts": ["zepto.min.js", "json2.js", "kippt_omnibox.js", "kippt_context_menu.js"]
+        "page" : "background.html"
     },
     "browser_action": {
         "default_icon": "img/icon19.png",
@@ -25,12 +26,12 @@
         "popup": "extension.html"
     },
     "content_scripts": [{
-        "js": ["kippt_content.js"],
+        "js": ["js/kippt_content.js"],
         "matches": ["http://*/*", "https://*/*"]
     },
     {
         "all_frames": true,
-        "js": ["kippt_iframe.js"],
+        "js": ["js/kippt_extension.js"],
         "matches": ["https://kippt.com/extensions*"]
     }]
 }

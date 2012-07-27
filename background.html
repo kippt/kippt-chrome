@@ -1,0 +1,36 @@
+<!-- Must include the socket script for background page to use -->
+<script src="js/vendor/socket.js"></script>
+<script src="js/vendor/jquery.js"></script>
+<script src="js/vendor/json2.js"></script>
+<script src="js/vendor/kippt_omnibox.js"></script>
+<script src="js/vendor/kippt_context_menu.js"></script>
+
+<script type="text/javascript">
+(function() {
+    // Functions for socket.js
+    window.KipptExtension = {
+        taskReceived: function(msg) {
+            var type;
+            if (!msg.id) {
+                // Create new
+                type = 'POST'
+                url = 'https://kippt.com/api/clips/';
+            } else {
+                // Update
+                type = 'PUT'
+                url = 'https://kippt.com/api/clips/'+msg.id+'/'
+            }
+            
+            var request = $.ajax({
+                url: url,
+                type: type,
+                dataType: 'json',
+                data: JSON.stringify(msg)
+            });
+            request.fail(function(jqXHR, textStatus){
+                alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
+            });
+        }
+    };
+})();
+</script>
