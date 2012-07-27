@@ -17,6 +17,7 @@
     ],
     
     "omnibox": { "keyword" : "k" },
+    "options_page": "options.html",
     "background": {
         "page" : "background.html"
     },
