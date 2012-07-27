@@ -50,12 +50,27 @@
   </script>
 </head>
 <body>
-<label>Button color:
-  <select id="color">
-   <option value="red">Red (default)</option>
-   <option value="grey">Grey</option>
-  </select>
-</label>
+    <div class="button-color">
+        <label>Button color:
+            <select id="color">
+                <option value="red">Red (default)</option>
+                <option value="grey">Grey</option>
+            </select>
+       </label>
+    </div>
+    <div class="services">
+        <h2>Services</h2>
+        <ul>
+            <li><input type="checkbox" value="facebook" id="id_facebook" /> <label for="id_facebook">Facebook</label></li>
+            <li><input type="checkbox" value="twitter" id="id_twitter" /> <label for="id_twitter">Twitter</label></li>
+            <li><input type="checkbox" value="tumblr" id="id_tumblr" /> <label for="id_tumblr">Tumblr</label></li>
+            
+            <li><input type="checkbox" value="instapaper" id="id_instapaper" /> <label for="id_instapaper">Instapaper</label></li>
+            <li><input type="checkbox" value="readability" id="id_readability" /> <label for="id_readability">Readability</label></li>
+            <li><input type="checkbox" value="pocket" id="id_pocket" /> <label for="id_pocket">Pocket</label></li>
+            
+        </ul>
+    </div>
 <br>
 <button>Save</button>
 <p id="status"></p>
