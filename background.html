@@ -10,30 +10,55 @@
     // Functions for socket.js
     window.KipptExtension = {
         taskReceived: function(msg) {
-            var type;
-            if (!msg.id) {
-                // Create new
-                type = 'POST'
-                url = 'https://kippt.com/api/clips/';
-            } else {
-                // Update
-                type = 'PUT'
-                url = 'https://kippt.com/api/clips/'+msg.id+'/'
+            // Helper function for clip creation
+            var createNewClip = function(msg) {
+                var type;
+                if (!msg.id) {
+                    // Create new
+                    type = 'POST'
+                    url = 'https://kippt.com/api/clips/';
+                } else {
+                    // Update
+                    type = 'PUT'
+                    url = 'https://kippt.com/api/clips/'+msg.id+'/'
+                }
+
+                var request = $.ajax({
+                    url: url,
+                    type: type,
+                    dataType: 'json',
+                    data: JSON.stringify(msg)
+                });
+                request.done(function(){
+                    // Clear page cache
+                    localStorage.removeItem('cache-title');
+                    localStorage.removeItem('cache-notes');
+                });
+                request.fail(function(jqXHR, textStatus){
+                    alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
+                });
             }
             
-            var request = $.ajax({
-                url: url,
-                type: type,
-                dataType: 'json',
-                data: JSON.stringify(msg)
-            });
-            request.done(function(){
-                localStorage.removeItem('cache-title');
-                localStorage.removeItem('cache-notes');
-            });
-            request.fail(function(jqXHR, textStatus){
-                alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
-            });
+            // New list
+            if (msg['new_list']) {
+                var listRequest = $.ajax({
+                    url: 'https://kippt.com/api/lists/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: JSON.stringify(msg['new_list'])
+                });
+                listRequest.done(function(data){
+                    // Create clip with new list
+                    msg['list'] = data.id;
+                    createNewClip(msg);
+                });
+                listRequest.fail(function(){
+                    alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
+                });
+            } else {
+                // Create clip with existing list
+                createNewClip(msg);
+            }
         }
     };
 })();

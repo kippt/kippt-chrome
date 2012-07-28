@@ -1,6 +1,7 @@
 html, body {
     min-width: 420px;
     min-height: 240px;
+    max-height: 240px;
     margin: 0px;
 
     background: #FFF;
@@ -125,7 +126,20 @@ input[type=checkbox] {
 }
 
 #kippt-list #id_new_list {
+    padding: 4px 2px;
+    width: 250px;
+    font-weight: normal;
+}
+
+#kippt-list #new_list {
     display: none;
+    
+    font-size: 13px;
+    color: #111;
+}
+
+#kippt-list #new_list #id_private {
+    margin-left: 12px;
 }
 
 .kippt-later {

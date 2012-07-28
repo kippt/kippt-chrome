@@ -78,6 +78,7 @@ $(function() {
                         linkShare('twitter');
                     if (services.facebook === false)
                         linkShare('facebook');
+                    
                     if (services.tumblr === false)
                         linkShare('tumblr');
                     else
@@ -131,6 +132,15 @@ $(function() {
                         $('#id_list').append(new Option(list['title'], list['id'], true, true));
                     }
                     $('#id_list option').first().attr('selected', 'selected');
+                    
+                    $('#id_list').append('<option id="new-list-toggle">-- New list --</option>');
+                    $('#id_list').on('change', function(){
+                        if ($(this).children("option#new-list-toggle:selected").length) {
+                            $('#id_list').hide();
+                            $('#new_list').show();
+                            $('#id_new_list').focus();
+                        }
+                    });
                 };
 
                 // Fill lists from cache
@@ -173,6 +183,16 @@ $(function() {
                         notes: $('#id_notes').val(),
                         list: $('#id_list option:selected').val(),
                         source: 'chrome_v1.1'
+                    }
+                    
+                    // New list
+                    if ($('#id_new_list').val()) {
+                        data['new_list'] = {};
+                        data['new_list']['title'] = $('#id_new_list').val()
+                        if ($('#id_private').is(':checked'))
+                            data['new_list'].is_private = true
+                        else
+                            data['new_list'].is_private = false
                     }
                     
                     // Shares
