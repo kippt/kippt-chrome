@@ -97,8 +97,9 @@ $(function() {
                         showShare('pocket');
                 });
                 userResponse.fail(function(jqXHR, textStatus){
-                    $('.existing .loading').hide();
-                    $('#logged-out').show();
+                    // Logged out user, open login page
+                    window.open('https://kippt.com/login/');
+                    window.close();
                 });
                 
                 // Check for duplicates
