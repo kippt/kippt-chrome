@@ -67,7 +67,7 @@ $(function() {
                     var linkShare = function(serviceName) {
                         $('#kippt-actions .' + serviceName).tipsy({title: 'data-connect-title', gravity: 'sw'});
                         $('#kippt-actions .' + serviceName).click(function(e) {
-                            window.open('https://kippt.com/accounts/settings/connections/')
+                            window.open('https://kippt.com/accounts/settings/connections/');
                         });
 
                     };
@@ -101,14 +101,14 @@ $(function() {
                     $('#logged-out').show();
                 });
                 
-                // Check for dublicates
+                // Check for duplicates
                 $('.existing .loading').append(spinner.el);
-                var dublicateRequest = $.ajax({
+                var duplicateRequest = $.ajax({
                     url: 'https://kippt.com/api/clips/?include_data=list&url='+escape(url),
                     type: "GET",
                     dataType: 'json'
                 });
-                dublicateRequest.done(function(response){
+                duplicateRequest.done(function(response){
                     $('.existing .loading').hide();
                     if (response.meta.total_count) {
                         var duplicate = response.objects[0];
@@ -183,7 +183,7 @@ $(function() {
                         notes: $('#id_notes').val(),
                         list: $('#id_list option:selected').val(),
                         source: 'chrome_v1.1'
-                    }
+                    };
                     
                     // New list
                     if ($('#id_new_list').val()) {
@@ -207,7 +207,7 @@ $(function() {
                     window.close();
                 });
                 
-                // Cache notes
+                // Cache title & notes on change
                 $('#id_title').on('keyup change cut paste', function(e){
                     localStorage.setItem('cache-title', $('#id_title').val())
                 });
