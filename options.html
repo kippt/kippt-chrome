@@ -53,34 +53,115 @@
         $("button").click(save_options);
     });
   </script>
+  <style type="text/css">
+    article {
+        font-family:"Helvetica Neue," Helvetica, Arial, sans-serif;
+        width:600px;
+        margin:50px auto 0 auto;
+    }
+    
+    h1 {
+        font-weight:normal;
+        margin:30px 0 0 0;
+    }
+    
+    #button-color {
+        list-style:none;
+        margin:0;
+        margin-left:200px;
+        padding:0;
+    }
+    
+    #button-color li {
+        margin-bottom:15px;
+    }
+    
+    label {
+        color:#777;
+    }
+    
+    label img {
+        vertical-align:text-bottom;
+    }
+    
+    label span {
+        width:40px;
+        display:inline-block;
+        text-align:center;
+    }
+    
+    section {
+        margin:20px 0 0;
+        padding:40px 0 10px 0;
+        border-top:1px solid #ddd;
+    }
+    
+    h2 {
+        float:left;
+        width:180px;
+        font-size:16px;
+        margin:0;
+    }
+    
+    .action {
+        padding:20px 0;
+        background:whitesmoke;
+    }
+    
+    button {
+        margin: 0 2px 0 0;
+        min-width: 73px;
+        background-color: #EFEFEF;
+        background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0, white), color-stop(1, #EFEFEF));
+        background-image: -webkit-linear-gradient(white, #EFEFEF);
+        box-shadow: 0 1px 1px #EEE;
+        font-weight: bold;
+        border: 1px solid #CCC;
+        border-top: 1px solid #DDD;
+        color: #333;
+        text-shadow: 0 1px 0px white;
+        border-bottom: 1px solid #AAA;
+        padding: 0.5em 0.8em;
+        -webkit-border-radius: 3px;
+        border-radius: 3px;
+        -webkit-transition: 0.15s border-color linear;
+        white-space: nowrap;
+        vertical-align: middle;
+        font-size: 13px;
+        margin-left:200px;
+    }
+  </style>
 </head>
 <body>
-    <div class="button-color">
-        <label>Extension button theme:
-            <ul id="button-color">
-                <li><input type="radio" name="button_color" value="red" id="id_button_original"> <label for="id_button_original"><img src="img/icon19.png" />Original</label></li>
-                <li><input type="radio" name="button_color" value="grey" id="id_button_grey"> <label for="id_button_grey"><img src="img/icon19_grey.png" />Greyscale</label></li>
-                <li><input type="radio" name="button_color" value="light" id="id_button_light"> <label for="id_button_light"><img src="img/icon19_light.png" />Light</label></li>
-            </select>
-       </label>
-    </div>
-    <!--
-    <div class="services">
-        <h2>Services</h2>
-        <ul>
-            <li><input type="checkbox" value="facebook" id="id_facebook" /> <label for="id_facebook">Facebook</label></li>
-            <li><input type="checkbox" value="twitter" id="id_twitter" /> <label for="id_twitter">Twitter</label></li>
-            <li><input type="checkbox" value="tumblr" id="id_tumblr" /> <label for="id_tumblr">Tumblr</label></li>
+    <article>
+        <h1>Kippt Extension Settings</h1>
+        <section class="button-color">
+            <h2>Button style</h2>
+                <ul id="button-color">
+                    <li><input type="radio" name="button_color" value="red" id="id_button_original"> <label for="id_button_original"><span><img src="img/icon19.png" /></span>Original</label></li>
+                    <li><input type="radio" name="button_color" value="grey" id="id_button_grey"> <label for="id_button_grey"><span><img src="img/icon19_grey.png" /></span>Greyscale</label></li>
+                    <li><input type="radio" name="button_color" value="light" id="id_button_light"> <label for="id_button_light"><span><img src="img/icon19_light.png" /></span>Light</label></li>
+                </select> 
+        </section>
+        <!--
+        <section class="services">
+            <h2>Services</h2>
+            <ul>
+                <li><input type="checkbox" value="facebook" id="id_facebook" /> <label for="id_facebook">Facebook</label></li>
+                <li><input type="checkbox" value="twitter" id="id_twitter" /> <label for="id_twitter">Twitter</label></li>
+                <li><input type="checkbox" value="tumblr" id="id_tumblr" /> <label for="id_tumblr">Tumblr</label></li>
             
-            <li><input type="checkbox" value="instapaper" id="id_instapaper" /> <label for="id_instapaper">Instapaper</label></li>
-            <li><input type="checkbox" value="readability" id="id_readability" /> <label for="id_readability">Readability</label></li>
-            <li><input type="checkbox" value="pocket" id="id_pocket" /> <label for="id_pocket">Pocket</label></li>
+                <li><input type="checkbox" value="instapaper" id="id_instapaper" /> <label for="id_instapaper">Instapaper</label></li>
+                <li><input type="checkbox" value="readability" id="id_readability" /> <label for="id_readability">Readability</label></li>
+                <li><input type="checkbox" value="pocket" id="id_pocket" /> <label for="id_pocket">Pocket</label></li>
             
-        </ul>
-    </div>
-    -->
-<br>
-<button>Save</button>
-<p id="status"></p>
+            </ul>
+        </section>
+        -->
+    <section class="action">
+        <button>Save Changes</button>
+    </section>
+    <p id="status"></p>
+</article>
 </body>
 </html>
