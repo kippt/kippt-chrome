@@ -16,10 +16,7 @@ body {
     -webkit-font-smoothing:antialiased;
 }
 
-#kippt-frame {
-}
-
-.home, .profile, .logo, #kippt-actions .toggle {
+.home, .profile, .settings, .logo, #kippt-actions .toggle {
     background-image:url(/img/extension-sprite.png);
     background-repeat:no-repeat;
 }
@@ -34,7 +31,7 @@ body {
     box-shadow:0 0px 1px #eee;
 }
 
-.home, .profile, .logo {
+.home, .profile, .logo, .settings {
     float:right;
     height:20px;
     width:20px;
@@ -57,7 +54,6 @@ body {
 .existing {
     position: absolute;
     left: 68px;
-    
     float: left;
     margin: 11px 0 0 3px;
 }
@@ -75,6 +71,10 @@ body {
 
 .profile {
     background-position:14px -19px;
+}
+
+.settings {
+    background-position:15px -51px;
 }
 
 .home:hover, .profile:hover {
@@ -122,7 +122,7 @@ input[type=checkbox] {
 }
 
 #kippt-list select {
-    width:397px;
+    width:307px;
 }
 
 #kippt-list #id_new_list {
@@ -144,7 +144,7 @@ input[type=checkbox] {
 
 .kippt-later {
     padding: 4px;
-    font-size: 11px;
+    font-size: 12px;
     float: right;
     color: #333;
     text-decoration: none;
@@ -156,8 +156,8 @@ input[type=checkbox] {
 
 #kippt-actions {
     border-top:1px solid #ccc;
-    padding:10px;
-    height:30px;
+    padding:8px;
+    height:31px;
 }
 
 #kippt-actions > div {
