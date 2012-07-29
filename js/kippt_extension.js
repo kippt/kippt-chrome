@@ -187,6 +187,11 @@ $(function() {
                         source: 'chrome_v1.1'
                     };
                     
+                    // Read later
+                    if ($('#id_is_read_later').is(':checked'))
+                        data.is_read_later = true;
+                    
+                    
                     if (existingClipId) {
                         data.id = existingClipId
                     }
