@@ -70,14 +70,14 @@ body {
 }
 
 .profile {
-    background-position:14px -19px;
+    background-position:14px -18px;
 }
 
 .settings {
     background-position:15px -51px;
 }
 
-.home:hover, .profile:hover {
+.home:hover, .profile:hover, .settings:hover {
     opacity:0.8;
 }
 
@@ -283,9 +283,7 @@ input[type=checkbox] {
 }
 
 #submit_clip:active, a.button:active {
-    background-image: none;
-      -webkit-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
-      -moz-box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
+    background-image: none
       box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.15), 0 1px 2px rgba(0, 0, 0, 0.05);
       background-color: #e6e6e6;
       background-color: #d9d9d9 \9;
