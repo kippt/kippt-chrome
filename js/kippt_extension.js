@@ -1,4 +1,6 @@
 $(function() {
+    var existingClipId;
+    
     chrome.tabs.getSelected(null, function(tab) {
         // Extension
         chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
@@ -113,9 +115,9 @@ $(function() {
                     $('.existing .loading').hide();
                     if (response.meta.total_count) {
                         var duplicate = response.objects[0];
-                        existingClipId = duplicate.id;
                         $('.existing a').show();
                         $('.existing a').click(function(e){
+                            existingClipId = duplicate.id;
                             $('#id_title').val(duplicate.title);
                             $('#id_notes').val(duplicate.notes);
                             $('#id_list option[value='+duplicate.list.id+']').attr('selected', 'selected');
@@ -178,13 +180,16 @@ $(function() {
                 $('#submit_clip').click(function(e){
                     // Data
                     var data = {
-                        id: existingClipId,
                         url: url,
                         title: $('#id_title').val(),
                         notes: $('#id_notes').val(),
                         list: $('#id_list option:selected').val(),
                         source: 'chrome_v1.1'
                     };
+                    
+                    if (existingClipId) {
+                        data.id = existingClipId
+                    }
                     
                     // New list
                     if ($('#id_new_list').val()) {
