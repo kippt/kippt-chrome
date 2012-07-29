@@ -27,12 +27,6 @@
                 });
                 break;
         }
-
-        // Update status to let user know options were saved.
-        $("#status").text("Saved!");
-        setTimeout(function() {
-            $("#status").text();
-        }, 1500);
     }
 
     // Restores select box state to saved value from localStorage.
@@ -130,6 +124,15 @@
         font-size: 13px;
         margin-left:200px;
     }
+    
+    button:focus {
+        outline: 5px auto -webkit-focus-ring-color;
+        outline-offset: -2px;
+    }
+    
+    button:active {
+        background-image: -webkit-linear-gradient(#EFEFEF, white);
+    }
   </style>
 </head>
 <body>
@@ -161,7 +164,6 @@
     <section class="action">
         <button>Save Changes</button>
     </section>
-    <p id="status"></p>
 </article>
 </body>
 </html>
