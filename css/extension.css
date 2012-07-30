@@ -158,11 +158,12 @@ input[type=checkbox] {
     border-top:1px solid #ccc;
     padding:8px;
     height:31px;
+    position:relative;
 }
 
 #kippt-actions > div {
     padding:2px;
-    width:43px;
+    width:41px;
     height:24px;
     display:inline-block;
     line-height:20px;
@@ -176,47 +177,46 @@ input[type=checkbox] {
     width:20px;
     height:20px;
     text-align:center;
-    margin-left:1px;
     margin-top: 1px;
     border-radius:2px;
     line-height:18px;
     vertical-align:middle;
 }
 
-/*#kippt-actions .toggle:hover {
-    background-color:#bbb;
-}*/
+#kippt-actions .toggle {
+    background:url(../img/extension-sprite.png) no-repeat; 
+}
 
 #kippt-actions .twitter .toggle {
-    background-image:url(http://twitter.com/favicon.ico);
+    background-position:-25px -25px;
 }
 
 #kippt-actions .facebook .toggle {
-    background-image:url(http://facebook.com/favicon.ico);
+    background-position:-25px 1px;
 }
 
 #kippt-actions .buffer .toggle {
-    background-image:url(http://bufferapp.com/favicon.ico);
+    background-position:-56px -25px;
 }
 
 #kippt-actions .tumblr .toggle {
-    background-image:url(http://tumblr.com/favicon.ico);
+    background-position:-54px -28px;
 }
 
 #kippt-actions .instapaper .toggle {
-    background-image:url(http://instapaper.com/favicon.ico);
+    background-position:-54px -57px;
 }
 
 #kippt-actions .readability .toggle {
-    background-image:url(http://readability.com/favicon.ico);
+    background-position:-54px -83px; 
 }
 
 #kippt-actions .pocket .toggle {
-    background-image:url(http://getpocket.com/favicon.ico);
+    background-position:-25px -84px;
 }
 
 #kippt-actions .buffer, #kippt-actions .tumblr, #kippt-actions .instapaper, #kippt-actions .readability, #kippt-actions .pocket {
-    display: none;
+  display:none; 
 }
 
 #kippt-actions .connect a {
@@ -260,6 +260,9 @@ input[type=checkbox] {
     
     font-size: 13px;
     line-height: 18px;
+    position:absolute;
+    right:10px;
+    bottom:8px;
 }
 
 #submit_clip:hover, a.button:hover {
