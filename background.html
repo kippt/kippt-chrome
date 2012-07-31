@@ -23,36 +23,36 @@
                     url = 'https://kippt.com/api/clips/'+msg.id+'/'
                 }
 
-                var request = $.ajax({
+                $.ajax({
                     url: url,
                     type: type,
                     dataType: 'json',
                     data: JSON.stringify(msg)
-                });
-                request.done(function(){
+                })
+                .done(function(){
                     // Clear page cache
                     localStorage.removeItem('cache-title');
                     localStorage.removeItem('cache-notes');
-                });
-                request.fail(function(jqXHR, textStatus){
+                })
+                .fail(function(jqXHR, textStatus){
                     alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
                 });
             }
             
             // New list
             if (msg['new_list']) {
-                var listRequest = $.ajax({
+                $.ajax({
                     url: 'https://kippt.com/api/lists/',
                     type: 'POST',
                     dataType: 'json',
                     data: JSON.stringify(msg['new_list'])
-                });
-                listRequest.done(function(data){
+                })
+                .done(function(data){
                     // Create clip with new list
                     msg['list'] = data.id;
                     createNewClip(msg);
-                });
-                listRequest.fail(function(){
+                })
+                .fail(function(){
                     alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
                 });
             } else {

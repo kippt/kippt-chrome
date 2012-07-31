@@ -1,6 +1,16 @@
 $(function() {
     var existingClipId;
     
+    var Kippt = {};
+    
+    Kippt.closePopover = function() {
+        window.close();
+    };
+
+    Kippt.openTab = function(url) {
+        chrome.tabs.create({url: url});
+    };
+    
     chrome.tabs.getSelected(null, function(tab) {
         // Extension
         chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
@@ -32,8 +42,8 @@ $(function() {
             
             if (tab.url.indexOf('chrome://') == 0) {
                 // Not tab content - Open Kippt
-                chrome.tabs.update({url: 'https://kippt.com/inbox/'});
-                window.close();
+                Kippt.openTab('https://kippt.com/inbox/');
+                Kippt.closePopover();
             } else {
                 // General variables
                 var url = tab.url,
@@ -59,59 +69,33 @@ $(function() {
                 var spinner = new Spinner(opts).spin();
 
                 // Get user data
-                var userResponse = $.ajax({
+                $.ajax({
                     url: 'https://kippt.com/api/account/?include_data=services',
                     type: "GET",
                     dataType: 'json'
-                });
-                userResponse.done(function(data){
-                    var services = data.services;
-                    var linkShare = function(serviceName) {
-                        $('#kippt-actions .' + serviceName).tipsy({title: 'data-connect-title', gravity: 'sw'});
-                        $('#kippt-actions .' + serviceName).click(function(e) {
-                            window.open('https://kippt.com/accounts/settings/connections/');
-                        });
-
-                    };
-                    
-                    var showShare = function(serviceName) { $('#kippt-actions .'+serviceName).css('display', 'inline-block'); };
-                    
-                    if (services.twitter === false)
-                        linkShare('twitter');
-                    if (services.facebook === false)
-                        linkShare('facebook');
-                    
-                    if (services.tumblr === false)
-                        linkShare('tumblr');
-                    else
-                        showShare('tumblr');
-                    if (services.instapaper === false)
-                        linkShare('instapaper');
-                    else
-                        showShare('instapaper');
-                    if (services.readability === false)
-                        linkShare('readability');
-                    else
-                        showShare('readability');
-                    if (services.pocket === false)
-                        linkShare('pocket');
-                    else
-                        showShare('pocket');
-                });
-                userResponse.fail(function(jqXHR, textStatus){
+                })
+                .done(function(data){
+                    $.each(data.services, function(name, connected) {
+                        if (connected) {
+                            $("#kippt-actions ." + name).toggleClass("connected", connected);
+                            $("#kippt-actions ." + name).css('display', 'inline-block');
+                        }
+                    });
+                })
+                .fail(function(jqXHR, textStatus){
                     // Logged out user, open login page
-                    window.open('https://kippt.com/login/');
-                    window.close();
+                    Kippt.openTab('https://kippt.com/login/');
+                    Kippt.closePopover();
                 });
                 
                 // Check for duplicates
                 $('.existing .loading').append(spinner.el);
-                var duplicateRequest = $.ajax({
+                $.ajax({
                     url: 'https://kippt.com/api/clips/?include_data=list&url='+escape(url),
                     type: "GET",
                     dataType: 'json'
-                });
-                duplicateRequest.done(function(response){
+                })
+                .done(function(response){
                     $('.existing .loading').hide();
                     if (response.meta.total_count) {
                         var duplicate = response.objects[0];
@@ -167,15 +151,6 @@ $(function() {
                     }
                 )
 
-                // Shares
-                $('.share').click(function(e){
-                    if ($('.share:checked').length) {
-                        $('#submit_clip').val('Save & share');
-                    } else {
-                        $('#submit_clip').val('Save')
-                    }
-                });
-
                 // Handle save
                 $('#submit_clip').click(function(e){
                     // Data
@@ -215,7 +190,7 @@ $(function() {
                     
                     // Save to Kippt in background
                     Socket.postTask(data);
-                    window.close();
+                    Kippt.closePopover();
                 });
                 
                 // Cache title & notes on change
@@ -226,6 +201,26 @@ $(function() {
                     localStorage.setItem('cache-notes', $('#id_notes').val())
                 });
             }
+            
+            // Connect a service to share
+            $(document).on("click", "#kippt-actions > div:not(.connected)", function() {
+                Kippt.openTab("https://kippt.com/accounts/settings/connections/");
+                Kippt.closePopover();
+            });
+            
+            // Configure share tooltips
+            $("#kippt-actions > div").tipsy({
+                gravity: "sw",
+                title: function() {
+                    var el = $(this);
+                    if (el.hasClass("connected")) {
+                        return "Share on " + el.attr("data-service-name");
+                    }
+                    else {
+                        return "Click to connect with " + el.attr("data-service-name");
+                    }
+                }
+            });
         });
     });
 });
