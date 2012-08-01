@@ -1,7 +1,13 @@
 $(function() {
     var existingClipId;
     
-    var Kippt = {};
+    Kippt = {
+        userId: null
+    };
+    
+    // Load user data from cache
+    if (localStorage.getItem('kipptUser'))
+        Kippt.userId = localStorage.getItem('kipptUserId');
     
     Kippt.closePopover = function() {
         window.close();
@@ -9,6 +15,31 @@ $(function() {
 
     Kippt.openTab = function(url) {
         chrome.tabs.create({url: url});
+    };
+    
+    Kippt.updateLists = function(data) {
+        // Clear loading
+        $('#id_list').html('');
+        for (var i in data) {
+            var list = data[i], title;
+            
+            // Add user to title if not the current user
+            if (Kippt.userId && Kippt.userId != list['user']['id'])
+                title = list['title'] + ' (' + list['user']['username'] + ')';
+            else
+                title = list['title'];
+            $('#id_list').append(new Option(title, list['id'], true, true));
+        }
+        $('#id_list option').first().attr('selected', 'selected');
+        
+        $('#id_list').append('<option id="new-list-toggle">-- New list --</option>');
+        $('#id_list').on('change', function(){
+            if ($(this).children("option#new-list-toggle:selected").length) {
+                $('#id_list').hide();
+                $('#new_list').css('display', 'inline-block');
+                $('#id_new_list').focus();
+            }
+        });
     };
     
     chrome.tabs.getSelected(null, function(tab) {
@@ -75,6 +106,9 @@ $(function() {
                     dataType: 'json'
                 })
                 .done(function(data){
+                    Kippt.useriD = data['id'];
+                    localStorage.setItem('kipptUserId', data['id']);
+
                     $.each(data.services, function(name, connected) {
                         if (connected) {
                             $("#kippt-actions ." + name).toggleClass("connected", connected);
@@ -110,41 +144,21 @@ $(function() {
                     }
                 });
 
-                // Lists
-                var updateLists = function(data) {
-                    // Clear loading
-                    $('#id_list').html('');
-                    for (var i in data) {
-                        var list = data[i];
-                        $('#id_list').append(new Option(list['title'], list['id'], true, true));
-                    }
-                    $('#id_list option').first().attr('selected', 'selected');
-                    
-                    $('#id_list').append('<option id="new-list-toggle">-- New list --</option>');
-                    $('#id_list').on('change', function(){
-                        if ($(this).children("option#new-list-toggle:selected").length) {
-                            $('#id_list').hide();
-                            $('#new_list').css('display', 'inline-block');
-                            $('#id_new_list').focus();
-                        }
-                    });
-                };
-
                 // Fill lists from cache
                 var listCache = localStorage.getItem('kipptListCache');
                 if (listCache) {
-                    updateLists(JSON.parse(listCache));
+                    Kippt.updateLists(JSON.parse(listCache));
                 }
 
                 // Update lists from remote
                 $.getJSON(
-                    'https://kippt.com/api/lists/?limit=0',
+                    'https://kippt.com/api/lists/?limit=0&include_data=user',
                     function(response) {
                         var responseJSON = JSON.stringify(response.objects);
                         // Update only if lists have changed
                         if (responseJSON !== listCache) {
                             // Update UI
-                            updateLists(response.objects);
+                            Kippt.updateLists(response.objects);
                             // Save to cache
                             localStorage.setItem('kipptListCache', responseJSON);
                         }
