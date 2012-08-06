@@ -1,7 +1,7 @@
 {
     "name": "Kippt",
     "version": "1.1.3",
-
+    "manifest_version": 2,
     "description": "Kippt.com's Chrome extension",
     "homepage_url": "https://kippt.com",
     "icons": { 
@@ -23,7 +23,7 @@
     "browser_action": {
         "default_icon": "img/icon19.png",
         "default_title": "Kippt this page",
-        "popup": "extension.html"
+        "default_popup": "extension.html"
     },
     "content_scripts": [{
         "js": ["js/kippt_content.js"],
@@ -33,5 +33,14 @@
         "all_frames": true,
         "js": ["js/kippt_extension.js"],
         "matches": ["https://kippt.com/extensions*"]
+    },
+    {
+        "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/hackernews.js"],
+        "run_at": "document_end",
+        "matches": [
+            "*://news.ycombinator.com/",
+            "*://news.ycombinator.net/",
+            "*://news.ycombinator.org/"
+        ]
     }]
 }
