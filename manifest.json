@@ -45,8 +45,12 @@
     },
     {
         "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/twitter.js"],
-        "run_at": "document_end",
         "matches": ["*://*.twitter.com/*"]
+    },
+    {
+        "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/googlereader.js"],
+        "matches": ["*://*.google.com/reader/*"]
     }]
+
 
 }
