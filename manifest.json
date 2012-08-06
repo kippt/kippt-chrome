@@ -42,5 +42,11 @@
             "*://news.ycombinator.net/",
             "*://news.ycombinator.org/"
         ]
+    },
+    {
+        "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/twitter.js"],
+        "run_at": "document_end",
+        "matches": ["*://*.twitter.com/*"]
     }]
+
 }
