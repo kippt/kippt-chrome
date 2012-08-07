@@ -1,5 +1,5 @@
 $(function() {
-    var inject_inputs = ['inject_hn'];
+    var inject_inputs = ['inject_hn', 'inject_twitter', 'inject_google_reader'];
 
     // Saves options to localStorage.
     var save_options = function() {
