@@ -27,6 +27,13 @@
                 });
                 break;
         }
+
+        // Injection
+        $.each(['inject_hn'], function(i, name) {
+            var sel = 'input[name=' + name + ']';
+            localStorage[name] = $(sel).is(':checked');
+            console.log(sel, $(sel).is(':checked'), localStorage[name]);
+        });
     }
 
     // Restores select box state to saved value from localStorage.
@@ -144,9 +151,16 @@
                     <li><input type="radio" name="button_color" value="red" id="id_button_original"> <label for="id_button_original"><span><img src="img/icon19.png" /></span>Original</label></li>
                     <li><input type="radio" name="button_color" value="grey" id="id_button_grey"> <label for="id_button_grey"><span><img src="img/icon19_grey.png" /></span>Greyscale</label></li>
                     <li><input type="radio" name="button_color" value="light" id="id_button_light"> <label for="id_button_light"><span><img src="img/icon19_light.png" /></span>Light</label></li>
-                </select> 
+                </ul> 
+        </section>
+        <section class="share-buttons">
+            <h2>Share buttons</h2>
+            <ul id="share-buttons">
+                <li><input type="checkbox" name="inject_hn" id="id_inject_hn" /><label for="id_inject_hn">Hacker News</label></li>
+            </ul>
         </section>
         <!--
+
         <section class="services">
             <h2>Services</h2>
             <ul>
