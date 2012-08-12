@@ -24,19 +24,23 @@ $(function() {
 
         // Ignoring hashtag or @reply links
         var links = $('a:not(.twitter-hashtag, .twitter-atreply)', tweetEl);
-        if (links.length < 1)
-            return false; // No links in tweet
-
-        // Take the first
-        var a = links[0];
+        var a = null;
+        if (links.length < 1) {
+            // No links, use tweet URL
+            var url = $('.time a', parentEl)[0].href;
+        } else {
+            // Take the first link
+            a = links[0];
+            url = a.href;
+        }
 
         // Make a copy to extract text
         var el = $('<span>' + tweetEl.html() + '</span>');
-        $('a', el).remove() // Remove all links
+        if (a) $('a', el).remove() // Remove all links
         var title = el.text();
         title = title.replace(/(\r\n|\n|\r)/gm, ''); // Strip newlines etc
         
-        return {url: a.href, title: title};
+        return {url: url, title: title};
     };
 
     var inject = function() {
@@ -57,11 +61,8 @@ $(function() {
             if (hasKipptAction(ul))
                 return;
 
-            var content = getShareContent(el);
-            if (content == false)
-                return; // No link in this tweet
-
             // Insert kippt link at the end
+            var content = getShareContent(el);
             var a = $('<a href="#">Kippt</a>');
             a.on('click', function() {
                 openPopup(a, content.title, content.url);
