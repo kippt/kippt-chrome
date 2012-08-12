@@ -19,7 +19,7 @@ $(function() {
             if (aList.length != 3)
                 return;
 
-            var a = $('<a href="#">kippt</a>');
+            var a = $('<a href="#">save to kippt</a>');
             a.on('click', function() {
                 // Get URL and title
                 var tdAbove = td.parentElement.previousSibling.childNodes[2];
