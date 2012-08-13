@@ -1,4 +1,6 @@
 $(function() {
+    $('head').append('<style type="text/css"> .tweet .action-kippt i, .tweet.opened-tweet .action-kippt i, .tweet.opened-tweet.hover .action-kippt i  { background-position: -2px -3px !important; } .tweet .action-kippt i { background-position: -2px -21px !important; }</style>');
+    
     var openPopup = function(a, title, url) {
         data = {
             title: title,
@@ -62,8 +64,10 @@ $(function() {
                 return;
 
             // Insert kippt link at the end
+            var sprite = chrome.extension.getURL('/img/twitter-sprite.png');
             var content = getShareContent(el);
-            var a = $('<a href="#">Kippt</a>');
+            var a = $('<a href="#"><i class="sm-embed" style="position: relative; top: 0px; margin-right: 4px; width: 13px; height: 13px; background-image: url('+sprite+')!important; background-repeat: no-repeat;"></i>Kippt</a>');
+
             a.on('click', function() {
                 openPopup(a, content.title, content.url);
             });
