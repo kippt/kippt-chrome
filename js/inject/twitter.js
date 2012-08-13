@@ -1,10 +1,11 @@
 $(function() {
     $('head').append('<style type="text/css"> .tweet .action-kippt i, .tweet.opened-tweet .action-kippt i, .tweet.opened-tweet.hover .action-kippt i  { background-position: -2px -3px !important; } .tweet .action-kippt i { background-position: -2px -21px !important; }</style>');
     
-    var openPopup = function(a, title, url) {
+    var openPopup = function(a, title, url, notes) {
         data = {
             title: title,
             url: url,
+            notes: notes,
             source: "chrome_extension_twitter"
         };
         KipptOpenPopup(data);
@@ -27,10 +28,9 @@ $(function() {
         // Ignoring hashtag or @reply links
         var links = $('a:not(.twitter-hashtag, .twitter-atreply)', tweetEl);
         var a = null;
-        if (links.length < 1) {
-            // No links, use tweet URL
-            var url = $('.time a', parentEl)[0].href;
-        } else {
+        var url = null;
+        var tweetUrl = $('.time a', parentEl)[0].href;
+        if (links.length >= 1) {
             // Take the first link
             a = links[0];
             url = a.href;
@@ -42,7 +42,7 @@ $(function() {
         var title = el.text();
         title = title.replace(/(\r\n|\n|\r)/gm, ''); // Strip newlines etc
         
-        return {url: url, title: title};
+        return {url: url, title: title, tweetUrl: tweetUrl};
     };
 
     var inject = function() {
@@ -69,7 +69,11 @@ $(function() {
             var a = $('<a href="#"><i class="sm-embed" style="position: relative; top: 0px; margin-right: 4px; width: 13px; height: 13px; background-image: url('+sprite+')!important; background-repeat: no-repeat;"></i>Kippt</a>');
 
             a.on('click', function() {
-                openPopup(a, content.title, content.url);
+                if (content.url)
+                    openPopup(a, content.title, content.url, null);
+                else
+                    var notes = 'Via ' + content.tweetUrl;
+                    openPopup(a, content.title, content.tweetUrl, notes);
             });
 
             var newAction = $('<li class="action-kippt"></li>');
