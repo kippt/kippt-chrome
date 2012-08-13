@@ -16,7 +16,8 @@
     ],
     
     "web_accessible_resources": [
-      "img/twitter-sprite.png"
+      "img/twitter-sprite.png",
+      "img/icon16.png"
     ],
 
     "omnibox": { "keyword" : "k" },

@@ -38,7 +38,8 @@ $(function() {
                 return;
 
             // Insert kippt link at the end
-            var a = $('<a href="#">Kippt</a>');
+            var sprite = chrome.extension.getURL('/img/icon16.png');
+            var a = $('<a href="#" style="padding-left:21px; background:url('+sprite+') 1px -1px no-repeat">Kippt</a>');
             a.on('click', function() {
                 var content = getShareContent(el);
                 openPopup(a, content.title, content.url);
