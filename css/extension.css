@@ -199,6 +199,10 @@ input[type=checkbox] {
     background-position:-25px -56px;
 }
 
+#kippt-actions .appdotnet .toggle {
+    background-position:-84px -28px;
+}
+
 #kippt-actions .tumblr .toggle {
     background-position:-54px -28px;
 }
@@ -213,10 +217,6 @@ input[type=checkbox] {
 
 #kippt-actions .pocket .toggle {
     background-position:-25px -84px;
-}
-
-#kippt-actions .appnet .toggle {
-    background-position:-84px -28px;
 }
 
 #kippt-actions .buffer, #kippt-actions .appdotnet, #kippt-actions .tumblr, #kippt-actions .instapaper, #kippt-actions .readability, #kippt-actions .pocket {
