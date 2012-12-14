@@ -29,7 +29,7 @@ $(function() {
 
                 openPopup(a, title, url);
             });
-            
+
             // New link at the end
             var last = aList.last();
             last.after(a);
