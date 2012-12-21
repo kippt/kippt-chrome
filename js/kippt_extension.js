@@ -1,14 +1,14 @@
 $(function() {
     var existingClipId;
-    
+
     Kippt = {
         userId: null
     };
-    
+
     // Load user data from cache
     if (localStorage.getItem('kipptUser'))
         Kippt.userId = localStorage.getItem('kipptUserId');
-    
+
     Kippt.closePopover = function() {
         window.close();
     };
@@ -16,13 +16,13 @@ $(function() {
     Kippt.openTab = function(url) {
         chrome.tabs.create({url: url});
     };
-    
+
     Kippt.updateLists = function(data) {
         // Clear loading
         $('#id_list').html('');
         for (var i in data) {
             var list = data[i], title;
-            
+
             // Add user to title if not the current user
             if (Kippt.userId && Kippt.userId != list['user']['id'])
                 title = list['title'] + ' (' + list['user']['username'] + ')';
@@ -31,7 +31,7 @@ $(function() {
             $('#id_list').append(new Option(title, list['id'], true, true));
         }
         $('#id_list option').first().attr('selected', 'selected');
-        
+
         $('#id_list').append('<option id="new-list-toggle">-- New list --</option>');
         $('#id_list').on('change', function(){
             if ($(this).children("option#new-list-toggle:selected").length) {
@@ -41,7 +41,7 @@ $(function() {
             }
         });
     };
-    
+
     chrome.tabs.getSelected(null, function(tab) {
         // Extension
         chrome.tabs.sendRequest(tab.id, {helper: 'get_note'}, function(response) {
@@ -63,14 +63,14 @@ $(function() {
                 $('#id_notes').val(selected_note.trim());
 
                 $('textarea').focus();
-                
+
                 // Get from cache
                 if (localStorage.getItem('cache-title'))
                     $('#id_title').val( localStorage.getItem('cache-title') );
                 if (localStorage.getItem('cache-notes'))
                     $('#id_notes').val( localStorage.getItem('cache-notes') );
             });
-            
+
             if (tab.url.indexOf('chrome://') == 0) {
                 // Not tab content - Open Kippt
                 Kippt.openTab('https://kippt.com/inbox/');
@@ -79,7 +79,7 @@ $(function() {
                 // General variables
                 var url = tab.url,
                     existingClipId = false;
-                
+
                 // Init spinner
                 var opts = {
                   lines: 9,
@@ -121,7 +121,7 @@ $(function() {
                     Kippt.openTab('https://kippt.com/login/');
                     Kippt.closePopover();
                 });
-                
+
                 // Check for duplicates
                 $('.existing .loading').append(spinner.el);
                 $.ajax({
@@ -175,16 +175,16 @@ $(function() {
                         list: $('#id_list option:selected').val(),
                         source: 'chrome_v1.1'
                     };
-                    
+
                     // Read later
                     if ($('#id_is_read_later').is(':checked'))
                         data.is_read_later = true;
-                    
-                    
+
+
                     if (existingClipId) {
                         data.id = existingClipId;
                     }
-                    
+
                     // New list
                     if ($('#id_new_list').val()) {
                         data['new_list'] = {};
@@ -194,19 +194,19 @@ $(function() {
                         else
                             data['new_list'].is_private = false
                     }
-                    
+
                     // Shares
                     var services = [];
                     $('.share:checked').each(function(i, elem){
                         services.push($(elem).data('service'));
                     });
                     data['share'] = services;
-                    
+
                     // Save to Kippt in background
                     Socket.postTask(data);
                     Kippt.closePopover();
                 });
-                
+
                 // Cache title & notes on change
                 $('#id_title').on('keyup change cut paste', function(e){
                     localStorage.setItem('cache-title', $('#id_title').val())
@@ -214,14 +214,21 @@ $(function() {
                 $('#id_notes').on('keyup change cut paste', function(e){
                     localStorage.setItem('cache-notes', $('#id_notes').val())
                 });
+
+                $(document).on("keydown", function(e){
+                  if (e.which == 13 && e.metaKey) {
+                    e.preventDefault();
+                    $('#submit_clip').click();
+                  }
+                });
             }
-            
+
             // Connect a service to share
             $(document).on("click", "#kippt-actions > div:not(.connected)", function() {
                 Kippt.openTab("https://kippt.com/accounts/settings/connections/");
                 Kippt.closePopover();
             });
-            
+
             // Configure share tooltips
             $("#kippt-actions > div").tipsy({
                 gravity: "sw",
