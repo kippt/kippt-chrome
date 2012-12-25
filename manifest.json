@@ -60,6 +60,10 @@
         "matches": ["*://*.quora.com/*"]
     },
     {
+        "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/dribbble.js"],
+        "matches": ["*://*.dribbble.com/shots/*"]
+    },
+    {
         "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/googlereader.js"],
         "matches": ["*://*.google.com/reader/*"]
     }]
