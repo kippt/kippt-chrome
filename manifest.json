@@ -56,6 +56,10 @@
         "matches": ["*://*.twitter.com/*"]
     },
     {
+        "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/quora.js"],
+        "matches": ["*://*.quora.com/*"]
+    },
+    {
         "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/googlereader.js"],
         "matches": ["*://*.google.com/reader/*"]
     }]
