@@ -12,9 +12,10 @@ $(function() {
         return $('.action-kippt', div).length > 0
     };
 
-    var getShareContent = function(el) {
-        var title = $('h2.entry-title', el).text();
-        var url = $('a.entry-original', el)[0].href;
+    var getShareContent = function (el) {
+        var link = $('a.entry-title-link', el);
+        var title = link.text();
+        var url = link.attr('href');
         return {title: title, url: url};
     };
 
