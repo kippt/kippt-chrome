@@ -12,7 +12,9 @@ $(function() {
     var inject = function() {
         var tweetAction = $('.meta-act').has('.meta-act-link.meta-tweet');
         if (tweetAction.length === 1){
-            var a = $('<div class="meta-act"><a href class="meta-act-link meta-kippt">Save to Kippt</a></div>');
+            // Insert kippt link at the end
+            var sprite = chrome.extension.getURL('/img/dribbble-icon.png');      
+            var a = $('<div class="meta-act"><a href class="meta-act-link meta-kippt" style="background-image: url('+sprite+') !important;">Save to Kippt</a></div>');
             a.on('click', function(e) {
                 e.preventDefault();
                 // Get URL and title
