@@ -19,8 +19,9 @@ $(function() {
             if (aList.length != 3)
                 return;
 
-            var a = $('<a href="#">save to kippt</a>');
-            a.on('click', function() {
+            var a = $('<a href>save to kippt</a>');
+            a.on('click', function(e) {
+                e.preventDefault();
                 // Get URL and title
                 var tdAbove = td.parentElement.previousSibling.childNodes[2];
                 var aLink = $('a', tdAbove)[0];

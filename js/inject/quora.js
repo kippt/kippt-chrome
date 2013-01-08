@@ -13,7 +13,8 @@ $(function() {
         var rowList = $('.feed_item');
         if (rowList.length === 0){ //If not home page
             var a = $('<span class="bullet"> &bullet; </span><a href>Save to Kippt</a>');
-            a.on('click', function() {
+            a.on('click', function(e) {
+                e.preventDefault();
                 // Get URL and title
                 var url = document.URL;
                 var title = $('h1').text();
@@ -30,7 +31,8 @@ $(function() {
                     return;
 
                 var a = $('<span class="bullet"> &bullet; </span><a href style="color: #538DC2;">Save to Kippt</a>');
-                a.on('click', function() {
+                a.on('click', function(e) {
+                    e.preventDefault();
                     // Get URL and title
                     var url = "https://quora.com" + $('.question_link', div).attr('href');
                     var title = $('.question_link', div)[0].innerText;

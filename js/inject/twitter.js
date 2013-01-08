@@ -66,9 +66,10 @@ $(function() {
             // Insert kippt link at the end
             var sprite = chrome.extension.getURL('/img/twitter-sprite.png');
             var content = getShareContent(el);
-            var a = $('<a href="#"><i class="sm-embed" style="position: relative; top: 0px; margin-right: 4px; width: 13px; height: 13px; background-image: url('+sprite+')!important; background-repeat: no-repeat;"></i>Kippt</a>');
+            var a = $('<a href><i class="sm-embed" style="position: relative; top: 0px; margin-right: 4px; width: 13px; height: 13px; background-image: url('+sprite+')!important; background-repeat: no-repeat;"></i>Kippt</a>');
 
-            a.on('click', function() {
+            a.on('click', function(e) {
+                e.preventDefault();
                 if (content.url)
                     openPopup(a, content.title, content.url, null);
                 else
