@@ -17,9 +17,10 @@ $(function() {
             var a = $('<div class="meta-act"><a href class="meta-act-link meta-kippt" style="background-image: url('+sprite+') !important;">Save to Kippt</a></div>');
             a.on('click', function(e) {
                 e.preventDefault();
+                
                 // Get URL and title
                 var url = document.URL;
-                var title = $('h1').text();
+                var title = $('h1').text() + " by " + $('.shot-byline-user a').text();
 
                 openPopup(a, title, url);
             });
