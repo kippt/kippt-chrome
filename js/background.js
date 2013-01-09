@@ -4,6 +4,9 @@
         taskReceived: function(msg) {
             // Helper function for clip creation
             var createNewClip = function(msg) {
+                // Remove variable 'type', added by Chrome
+                delete msg.type;
+                
                 var type;
                 if (!msg.id) {
                     // Create new
