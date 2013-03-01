@@ -18,6 +18,8 @@ $(function() {
     };
 
     Kippt.updateLists = function(data) {
+        var existingSelection = $('#id_list option:selected').val();
+        
         // Clear loading
         $('#id_list').html('');
         for (var i in data) {
@@ -28,9 +30,12 @@ $(function() {
                 title = list['title'] + ' (' + list['user']['username'] + ')';
             else
                 title = list['title'];
-            $('#id_list').append(new Option(title, list['id'], true, true));
+            $('#id_list').append(new Option(title, list['id']));
         }
-        $('#id_list option').first().attr('selected', 'selected');
+        if (!existingSelection)
+            $('#id_list option').first().attr('selected', 'selected');
+        else
+            $('#id_list option[value='+existingSelection+']').attr('selected', 'selected');
 
         $('#id_list').append('<option id="new-list-toggle">-- New list --</option>');
         $('#id_list').on('change', function(){
