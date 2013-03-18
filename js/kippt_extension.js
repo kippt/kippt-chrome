@@ -111,7 +111,7 @@ $(function() {
                     dataType: 'json'
                 })
                 .done(function(data){
-                    Kippt.useriD = data['id'];
+                    Kippt.userId = data['id'];
                     localStorage.setItem('kipptUserId', data['id']);
 
                     $.each(data.services, function(name, connected) {
