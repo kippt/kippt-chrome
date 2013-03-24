@@ -1,0 +1,7 @@
+div.meta-act a.meta-kippt {
+	background-position: 12px 7px;
+}
+
+div.meta-act a.meta-kippt:hover {
+  background-position: 12px -41px;
+}
