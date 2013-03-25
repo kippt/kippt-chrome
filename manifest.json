@@ -45,9 +45,9 @@
         "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/hackernews.js"],
         "run_at": "document_end",
         "matches": [
-            "*://news.ycombinator.com/",
-            "*://news.ycombinator.net/",
-            "*://news.ycombinator.org/",
+            "*://news.ycombinator.com/*",
+            "*://news.ycombinator.net/*",
+            "*://news.ycombinator.org/*",
             "*://hackerne.ws/*"
 
         ]
@@ -62,6 +62,7 @@
     },
     {
         "js": ["js/vendor/jquery.js", "js/inject/popup.js", "js/inject/dribbble.js"],
+        "css": ["css/inject/dribbble.css"],
         "matches": ["*://*.dribbble.com/shots/*"]
     },
     {

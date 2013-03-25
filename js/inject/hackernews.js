@@ -16,7 +16,7 @@ $(function() {
 
         tdList.each(function(i, td) {
             var aList = $('a', td);
-            if (aList.length != 3)
+            if (aList.length != 2)
                 return;
 
             var a = $('<a href>save to kippt</a>');

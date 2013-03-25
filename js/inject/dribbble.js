@@ -10,7 +10,7 @@ $(function() {
     };
 
     var inject = function() {
-        var tweetAction = $('.meta-act').has('.meta-act-link.meta-tweet');
+        var tweetAction = $('.meta-act').has('.meta-act-link.meta-share');
         if (tweetAction.length === 1){
             // Insert kippt link at the end
             var sprite = chrome.extension.getURL('/img/dribbble-icon.png');      
