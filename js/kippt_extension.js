@@ -77,8 +77,8 @@ $(function() {
             });
 
             if (tab.url.indexOf('chrome://') == 0) {
-                // Not tab content - Open Kippt
-                Kippt.openTab('https://kippt.com/inbox/');
+                // Not tab content - Open Kippt in it
+                chrome.tabs.update(tab.id, {url: 'https://kippt.com/'});
                 Kippt.closePopover();
             } else {
                 // General variables
