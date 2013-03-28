@@ -6,6 +6,8 @@
             var createNewClip = function(msg) {
                 // Remove variable 'type', added by Chrome
                 delete msg.type;
+                var isFavorite = msg['is_favorite'];
+                delete msg['is_favorite'];
                 
                 var type;
                 if (!msg.id) {
@@ -24,10 +26,18 @@
                     dataType: 'json',
                     data: JSON.stringify(msg)
                 })
-                .done(function(){
+                .done(function(data){
                     // Clear page cache
                     localStorage.removeItem('cache-title');
                     localStorage.removeItem('cache-notes');
+                    // Set favorite if selected
+                    if (isFavorite) {
+                        $.ajax({
+                            url:  'https://kippt.com' + data['resource_uri'] + 'favorite/',
+                            type: 'POST',
+                            dataType: 'json',
+                        })
+                    }
                 })
                 .fail(function(jqXHR, textStatus){
                     alert( "Something went wrong when saving. Try again or contact hello@kippt.com");
