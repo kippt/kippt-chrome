@@ -152,13 +152,34 @@ $(function() {
                 // Fill lists from cache
                 var listCache = localStorage.getItem('kipptListCache');
                 if (listCache) {
-                    Kippt.updateLists(JSON.parse(listCache));
+                    // all the implementations Chorme are following an old version of the WebStorage standard,
+                    // where the value of the storage items can be only a string. Hence need to JSON.parse
+                    if (JSON.parse(localStorage.getItem('sort_list_alphabetically')) === true){
+                        listObjects = JSON.parse(listCache);
+                        listObjects.sort(function(a, b) {
+                                var textA = a.title.toUpperCase();
+                                var textB = b.title.toUpperCase();
+                                return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                        });
+                        Kippt.updateLists(listObjects);   
+                    }
+                    else
+                        Kippt.updateLists(JSON.parse(listCache));
                 }
 
                 // Update lists from remote
                 $.getJSON(
                     'https://kippt.com/api/lists/?limit=0&include_data=user',
                     function(response) {
+                        //Check if sort list alphabetically prefered & if yes - Sort
+                        if (JSON.parse(localStorage.getItem('sort_list_alphabetically')) === true){
+                            response.objects.sort(function(a, b) {
+                                    var textA = a.title.toUpperCase();
+                                    var textB = b.title.toUpperCase();
+                                    return (textA < textB) ? -1 : (textA > textB) ? 1 : 0;
+                            });
+                        }
+
                         var responseJSON = JSON.stringify(response.objects);
                         // Update only if lists have changed
                         if (responseJSON !== listCache) {
