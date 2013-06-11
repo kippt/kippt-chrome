@@ -16,21 +16,37 @@ $(function() {
     Kippt.openTab = function(url) {
         chrome.tabs.create({url: url});
     };
+    
+    Kippt.getListWithId = function(id) {
+        var listData = localStorage.getItem('kipptListCache');
+        for (var i in listData) {
+            var list = listData[i];
+            if list['id'] === id
+                return list
+        }
+    };
 
-    Kippt.updateLists = function(data) {
+    Kippt.updateLists = function() {
+        var listData = localStorage.getItem('kipptListCache'),
+            foldersCache = localStorage.getItem('kipptFoldersCache', foldersJSON);
         var existingSelection = $('#id_list option:selected').val();
         
         // Clear loading
         $('#id_list').html('');
         for (var i in data) {
-            var list = data[i], title;
-
-            // Add user to title if not the current user
-            if (Kippt.userId && Kippt.userId != list['user']['id'])
-                title = list['title'] + ' (' + list['user']['username'] + ')';
-            else
-                title = list['title'];
-            $('#id_list').append(new Option(title, list['id']));
+            var folder = data[i],
+                optgroup = $('<optgroup/>');
+            optgroup.attr('label', folder['title']);
+            $('#id_list').append(optgroup);
+            
+            for (var j in folder['lists']) {
+                // Add user to title if not the current user
+                if (Kippt.userId && Kippt.userId != list['user']['id'])
+                    title = list['title'] + ' (' + list['user']['username'] + ')';
+                else
+                    title = list['title'];
+                optgroup.append(new Option(title, list['id']));
+            }
         }
         if (!existingSelection)
             $('#id_list option').first().attr('selected', 'selected');
@@ -150,23 +166,31 @@ $(function() {
                 });
 
                 // Fill lists from cache
-                var listCache = localStorage.getItem('kipptListCache');
-                if (listCache) {
-                    Kippt.updateLists(JSON.parse(listCache));
+                var listCache       = localStorage.setItem('kipptListCache', listsJSON),
+                    foldersCache    = localStorage.setItem('kipptFoldersCache', foldersJSON);
+                if (listCache && foldersCache) {
+                    Kippt.updateLists();
                 }
 
                 // Update lists from remote
                 $.getJSON(
                     'https://kippt.com/api/lists/?limit=0&include_data=user',
                     function(response) {
-                        var responseJSON = JSON.stringify(response.objects);
-                        // Update only if lists have changed
-                        if (responseJSON !== listCache) {
-                            // Update UI
-                            Kippt.updateLists(response.objects);
-                            // Save to cache
-                            localStorage.setItem('kipptListCache', responseJSON);
-                        }
+                        var listsJSON = JSON.stringify(response.objects);
+                        // Get folders
+                        $.getJSON(
+                            'https://kippt.com/api/folders/',
+                            function(response) {
+                                var foldersJSON = JSON.stringify(response.objects);
+                                // Update only if lists have changed
+                                if (listsJSON !== listCache || foldersJSON !== foldersCache) {
+                                    // Save to cache
+                                    localStorage.setItem('kipptListCache', listsJSON);
+                                    localStorage.setItem('kipptFoldersCache', foldersJSON);
+                                    // Update UI
+                                    Kippt.updateLists();
+                                }
+                        })
                     }
                 )
 
